@@ -1,0 +1,4 @@
+repository "SuperMegaEpicGame@lanoir@cloud"
+  path "/"
+    smartbranch "/main/and/chelmisterclown/newmain"     
+     
