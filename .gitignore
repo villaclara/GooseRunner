@@ -10,6 +10,9 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+# Ignore plastic (Unity Version Control)
+/.plastic/*
+
 # Igonre some temporary files when creating APK
 /.utmp/*
 
