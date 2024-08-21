@@ -22,7 +22,7 @@ public class levelItemsBehaviour : MonoBehaviour
             Vector2 newPosition = transform.position;
             newPosition.y -= _fallSpeed * Time.deltaTime;
             transform.position = newPosition;
-            if (transform.position.y <= -5.5f)
+            if (transform.position.y <= -5.5f * Screen.height / GlobalVariables.commonScreenHeight)
             {
                 gameObject.SetActive(false);
                 if (gameObject.CompareTag("blockBehindLadder"))

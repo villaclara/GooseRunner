@@ -1215,7 +1215,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 118.55, y: -685}
+  m_AnchoredPosition: {x: 118.54999, y: -685}
   m_SizeDelta: {x: 200.8999, y: 200.41663}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &889492213
@@ -1608,7 +1608,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1022097583
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1826,6 +1826,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skins:
+  - buttonBehind: {fileID: 499709691}
+    cost: 0
+    isBought: 0
+    isChosen: 0
   - buttonBehind: {fileID: 931455225}
     cost: 0
     isBought: 0
@@ -1839,10 +1843,6 @@ MonoBehaviour:
     isBought: 0
     isChosen: 0
   - buttonBehind: {fileID: 889492215}
-    cost: 0
-    isBought: 0
-    isChosen: 0
-  - buttonBehind: {fileID: 200130171}
     cost: 0
     isBought: 0
     isChosen: 0
