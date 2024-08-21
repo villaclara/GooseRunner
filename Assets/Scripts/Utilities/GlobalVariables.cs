@@ -11,4 +11,7 @@ public class GlobalVariables : MonoBehaviour
 
     public static bool gameIsRunning = true;
 
+    public static float commonScreenWidth = 1170;
+    public static float commonScreenHeight = 2532;
+
 }

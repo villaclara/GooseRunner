@@ -96,9 +96,24 @@ public class GameManager : MonoBehaviour
         gameStarted = false;
         GlobalVariables.fallSpeed = 0f;
         GlobalVariables.gameIsRunning = true;
+
+
+        ///////////////////////////////
+        ///temporary
+        //Debug.Log(Screen.height);//2532
+        //Debug.Log(Screen.width);//1170
+        
+        Rescale(_ladders);
+        Rescale(_wallsBehindLadder);
+        Rescale(_BGWalls);
+        Rescale(_brickWalls);
+        Rescale(_verticalWalls);
+        //////////
         _wallScale = _walls[0].transform.localScale.x;
         _ladderScaleX = _ladders[0].transform.localScale.x;
         _verticalWallScale = _verticalWalls[0].transform.localScale.y;
+
+
 
 
         _unitsPerPixel = 2 * Camera.main.orthographicSize / Screen.height;
@@ -141,17 +156,8 @@ public class GameManager : MonoBehaviour
         bgGrassR.size = new Vector2(fullScreenWidth * 1.1f, (Screen.height * _unitsPerPixel) * 0.2f);
 
 
-        ///////////////////////////////
-        ///temporary
-        //Debug.Log(Screen.height);//2532
-        //Debug.Log(Screen.width);//1170
 
-        Rescale(_walls); 
-        Rescale(_ladders); 
-        Rescale(_wallsBehindLadder); 
-        Rescale(_BGWalls); 
-        Rescale(_brickWalls);
-        Rescale(_verticalWalls);
+
 
         Vector2 pausePannelSize = pausePannelRectTransform.sizeDelta;
         pausePannelSize.x = Screen.width;
@@ -160,9 +166,9 @@ public class GameManager : MonoBehaviour
 
         _rightWalls = new Queue<GameObject>();//stores references to right wall objects, use them to know when the layer is destroyed and need to spawn new
 
-
+        Debug.Log(-4.5f * Screen.height / GlobalVariables.commonScreenHeight);
         int i = 0;
-        for (float currentY = -4.5f; currentY < 7.5f; currentY++)//make starting layers
+        for (float currentY = -4.5f * Screen.height / GlobalVariables.commonScreenHeight; currentY < 7.5f * Screen.height / GlobalVariables.commonScreenHeight; currentY= currentY + 1 * Screen.height / GlobalVariables.commonScreenHeight)//make starting layers
         {
             if (i % 3 == 0)
             {
@@ -190,8 +196,8 @@ public class GameManager : MonoBehaviour
     private void Rescale(GameObject[] array)
     {
         Vector2 newScale = array[0].transform.localScale;
-        newScale.x = newScale.x * (Screen.width / 1170f);
-        newScale.y = newScale.y * (Screen.height / 2532f);
+        newScale.x = newScale.x * (Screen.width / GlobalVariables.commonScreenWidth);
+        newScale.y = newScale.y * (Screen.height / GlobalVariables.commonScreenHeight);
         for (int j = 0; j < array.Length; j++)
         {
             array[j].transform.localScale = newScale;
@@ -358,7 +364,7 @@ public class GameManager : MonoBehaviour
         wallBoxCollider2D.size = newSizeR;
         wall.SetActive(true);
 
-        _ladderPosition.y = wall.transform.position.y - 0.373f; //prew was 0.38f
+        _ladderPosition.y = wall.transform.position.y - 0.373f * Screen.height/GlobalVariables.commonScreenHeight; //prew was 0.38f
         ladder.transform.position = _ladderPosition;
         ladder.SetActive(true);
 
@@ -403,34 +409,34 @@ public class GameManager : MonoBehaviour
             if (randomBGSpawn == 3)
             {
                 GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                float BGWallSpawnPosX = spawnPointLeft.transform.position.x + 0.5f;
+                float BGWallSpawnPosX = spawnPointLeft.transform.position.x + 0.5f * Screen.width/ GlobalVariables.commonScreenWidth;
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
 
                 BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                BGWallSpawnPosX = BGWallSpawnPosX + 1f;// one becouse it the width of the BGWall
+                BGWallSpawnPosX = BGWallSpawnPosX + 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
 
                 BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                BGWallSpawnPosX = BGWallSpawnPosX + 1f;// one becouse it the width of the BGWall
+                BGWallSpawnPosX = BGWallSpawnPosX + 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
             }
             else
             {
                 GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                float BGWallSpawnPosX = spawnPointRight.transform.position.x - 0.5f;
+                float BGWallSpawnPosX = spawnPointRight.transform.position.x - 0.5f * Screen.width / GlobalVariables.commonScreenWidth;
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
 
                 BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                BGWallSpawnPosX = BGWallSpawnPosX - 1f;// one becouse it the width of the BGWall
+                BGWallSpawnPosX = BGWallSpawnPosX - 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
 
                 BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                BGWallSpawnPosX = BGWallSpawnPosX - 1f;// one becouse it the width of the BGWall
+                BGWallSpawnPosX = BGWallSpawnPosX - 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
             }
@@ -585,24 +591,24 @@ public class GameManager : MonoBehaviour
         if (randomBGSpawn == 1)
         {
             GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-            float BGWallSpawnPosX = spawnPosMx + _verticalWallScale * Vsize.x * 0.5f + 0.5f;
+            float BGWallSpawnPosX = spawnPosMx + _verticalWallScale * Vsize.x * 0.5f + 0.5f * Screen.width / GlobalVariables.commonScreenWidth;
             BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
             BGWall.SetActive(true);
 
             BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-            BGWallSpawnPosX = BGWallSpawnPosX + 1f;// one becouse it the width of the BGWall
+            BGWallSpawnPosX = BGWallSpawnPosX + 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
             BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
             BGWall.SetActive(true);
         }
         else if(randomBGSpawn == 2)
         {
             GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-            float BGWallSpawnPosX = spawnPosMx - _verticalWallScale * Vsize.x * 0.5f - 0.5f;
+            float BGWallSpawnPosX = spawnPosMx - _verticalWallScale * Vsize.x * 0.5f - 0.5f * Screen.width / GlobalVariables.commonScreenWidth;
             BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
             BGWall.SetActive(true);
 
             BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-            BGWallSpawnPosX = BGWallSpawnPosX - 1f;// one becouse it the width of the BGWall
+            BGWallSpawnPosX = BGWallSpawnPosX - 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
             BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
             BGWall.SetActive(true);
         }
