@@ -13,5 +13,6 @@ public class GlobalVariables : MonoBehaviour
 
     public static float commonScreenWidth = 1170;
     public static float commonScreenHeight = 2532;
+    public static float ladderHeight;
 
 }

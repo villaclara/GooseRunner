@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GemBehaviour : MonoBehaviour
@@ -28,12 +29,14 @@ public class GemBehaviour : MonoBehaviour
     private Vector3 _startLerpPosition;
 
     private float _time;
+    private float _unitsPerPixel;
 
 	private void Start()
 	{
         _gemTotalIconObject = GameObject.Find("gemIcon");
         _gemIconPosition = _gemTotalIconObject.transform.position;
 
+        _unitsPerPixel = 2 * Camera.main.orthographicSize / Screen.height;
         _gemTotalTextObject = GameObject.Find("gemsText");
     }
 
@@ -45,7 +48,7 @@ public class GemBehaviour : MonoBehaviour
             Vector3 newPosition = transform.position;
             newPosition.y -= _fallSpeed * Time.deltaTime;
             transform.position = newPosition;
-            if (transform.position.y <= -5.5)
+            if (transform.position.y <= -Screen.height * _unitsPerPixel / 2 - GlobalVariables.ladderHeight)
             {
                 Destroy(gameObject);
             }

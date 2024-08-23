@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -100,9 +101,10 @@ public class GameManager : MonoBehaviour
 
         ///////////////////////////////
         ///temporary
-        //Debug.Log(Screen.height);//2532
-        //Debug.Log(Screen.width);//1170
-        
+        Debug.Log(Screen.height);//2532
+        Debug.Log(Screen.width);//1170
+
+        Rescale(_walls);
         Rescale(_ladders);
         Rescale(_wallsBehindLadder);
         Rescale(_BGWalls);
@@ -168,7 +170,10 @@ public class GameManager : MonoBehaviour
 
         Debug.Log(-4.5f * Screen.height / GlobalVariables.commonScreenHeight);
         int i = 0;
-        for (float currentY = -4.5f * Screen.height / GlobalVariables.commonScreenHeight; currentY < 7.5f * Screen.height / GlobalVariables.commonScreenHeight; currentY= currentY + 1 * Screen.height / GlobalVariables.commonScreenHeight)//make starting layers
+        GlobalVariables.ladderHeight = ladderRenderer.size.y * _ladders[0].transform.localScale.y;
+        for (float currentY = -Screen.height * _unitsPerPixel/ 2; 
+            currentY <= Screen.height * _unitsPerPixel/ 2 + 2 * GlobalVariables.ladderHeight; 
+            currentY+= GlobalVariables.ladderHeight)//make starting layers
         {
             if (i % 3 == 0)
             {
@@ -236,43 +241,45 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!PauseMenu.isPaused)
+        if (PauseMenu.isPaused)
         {
-            if ((Input.touchCount > 0 || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && !gameStarted)
-            {
-                Touch touch = Input.GetTouch(0);
-                if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-                {
-                    lockerButton.SetActive(false);
-                    pauseButton.SetActive(true);
-                    gameStarted = true;
-                    GlobalVariables.fallSpeed = 0.4f;
-                    TapToStartText.gameObject.SetActive(false);
-                    InvokeRepeating("SpawnBoulder", 10f, 10f);
-                }
-            }
-
-            scoreText.text = GlobalVariables.score.ToString();
-            gameOverScreenScore.text = GlobalVariables.score.ToString();
-            if (GlobalVariables.score > PlayerPrefs.GetInt("HighScore", 0))
-            {
-                PlayerPrefs.SetInt("HighScore", GlobalVariables.score);
-                highScoreText.text = GlobalVariables.score.ToString();
-            }
-
-            gemScoreText.text = GlobalVariables.gems.ToString();
-            PlayerPrefs.SetInt("GemScore", GlobalVariables.gems);
-
-            //_fallSpeed = GlobalVariables.fallSpeed;
-            if ((_rightWalls.Count > 0) && !_rightWalls.Peek().activeSelf)
-            {
-                SpawnLayer();
-                _rightWalls.Dequeue();
-            }
-
-            if (!GlobalVariables.gameIsRunning && !onGameOverScreen)
-                GameOver();
+            return;
         }
+
+        if ((Input.touchCount > 0 || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && !gameStarted)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            {
+                lockerButton.SetActive(false);
+                pauseButton.SetActive(true);
+                gameStarted = true;
+                GlobalVariables.fallSpeed = 0.4f;
+                TapToStartText.gameObject.SetActive(false);
+                InvokeRepeating("SpawnBoulder", 10f, 10f);
+            }
+        }
+
+        scoreText.text = GlobalVariables.score.ToString();
+        gameOverScreenScore.text = GlobalVariables.score.ToString();
+        if (GlobalVariables.score > PlayerPrefs.GetInt("HighScore", 0))
+        {
+            PlayerPrefs.SetInt("HighScore", GlobalVariables.score);
+            highScoreText.text = GlobalVariables.score.ToString();
+        }
+
+        gemScoreText.text = GlobalVariables.gems.ToString();
+        PlayerPrefs.SetInt("GemScore", GlobalVariables.gems);
+
+        //_fallSpeed = GlobalVariables.fallSpeed;
+        if ((_rightWalls.Count > 0) && !_rightWalls.Peek().activeSelf)
+        {
+            SpawnLayer();
+            _rightWalls.Dequeue();
+        }
+
+        if (!GlobalVariables.gameIsRunning && !onGameOverScreen)
+            GameOver();
     }
 
     public void SpawnCloud()
@@ -309,16 +316,16 @@ public class GameManager : MonoBehaviour
     }
     private void SpawnLayer()
     {
-        Vector2 spawnPosL = spawnPointLeft.position;
+        float spawnPos = Screen.height * _unitsPerPixel / 2 + GlobalVariables.ladderHeight;
 
         int randV = Random.Range(1, 4);
         if (randV % 3 == 0)
         {
-            SpawnThreeWalls(spawnPosL.y);
+            SpawnThreeWalls(spawnPos);
         }
         else
         {
-            SpawnTwoWalls(spawnPosL.y);
+            SpawnTwoWalls(spawnPos);
             lastLadderPosX2 = -100f;
             lastVerticalWallPosX = -100f;
         }
