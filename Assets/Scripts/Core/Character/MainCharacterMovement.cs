@@ -60,8 +60,8 @@ public class MainCharacterMovement : MonoBehaviour
 	// Start is called before the first frame update
 	private void Start()
 	{
-
-		moveSpeed = 1.3f + Screen.width * 0.0005f;
+		float _screenWidthInUnits = Camera.main.orthographicSize * 2 * Screen.width / Screen.height;
+        moveSpeed = 1.5f *  _screenWidthInUnits/GlobalVariables.commonScreenWidthInUnits;
 		Debug.Log($"move speed is {moveSpeed}");
 		// Get the RigidBody2D component for the Character GameObject.
 		_body = GetComponent<Rigidbody2D>();
