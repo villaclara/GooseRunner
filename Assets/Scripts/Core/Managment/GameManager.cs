@@ -1,11 +1,13 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,6 +29,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer wallSpriteRenderer;
     public SpriteRenderer ladderRenderer;
     public SpriteRenderer verticalWallRenderer;
+    private SpriteRenderer objRenderer;
     public BoxCollider2D wallBoxCollider2D;
     private float _wallScale, _ladderScaleX, _verticalWallScale;//wall h64px w256px,  ladder h300px w100px 16x48
     private Vector2 _ladderPosition;
@@ -67,10 +70,10 @@ public class GameManager : MonoBehaviour
     public GameObject cloud;
     public Sprite cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud0;
     public GameObject lockerButton;
-
     private float fps;
     public TextMeshProUGUI FPSCounter;
-
+    public float ratioH, ratioW;
+    private float _screenWidthInUnits;
     public CanvasGroup canvasGroup;
 
     // Start is called before the first frame update
@@ -98,25 +101,22 @@ public class GameManager : MonoBehaviour
         GlobalVariables.gameIsRunning = true;
 
 
+        _unitsPerPixel = 2 * Camera.main.orthographicSize / Screen.height;
+
         ///////////////////////////////
         ///temporary
-        //Debug.Log(Screen.height);//2532
-        //Debug.Log(Screen.width);//1170
-        
-        Rescale(_ladders);
-        Rescale(_wallsBehindLadder);
-        Rescale(_BGWalls);
-        Rescale(_brickWalls);
-        Rescale(_verticalWalls);
-        //////////
+        Debug.Log(Screen.height);//2532
+        Debug.Log(Screen.width);//1170
+        Debug.Log(Camera.main.orthographicSize * 2 * Screen.width / Screen.height);
+        _screenWidthInUnits = Camera.main.orthographicSize * 2 * Screen.width / Screen.height;
         _wallScale = _walls[0].transform.localScale.x;
         _ladderScaleX = _ladders[0].transform.localScale.x;
         _verticalWallScale = _verticalWalls[0].transform.localScale.y;
 
 
+        Resize(_ladders);
+        Resize(_wallsBehindLadder);
 
-
-        _unitsPerPixel = 2 * Camera.main.orthographicSize / Screen.height;
         spawnPointLeft.position = new Vector2(-1 * _unitsPerPixel * Screen.width / 2, Screen.height * _unitsPerPixel / 2 + 1.5f);
         spawnPointRight.position = new Vector2(_unitsPerPixel * Screen.width / 2, Screen.height * _unitsPerPixel / 2 + 1.5f);
         _spawnPosL = spawnPointLeft.transform.position;
@@ -166,9 +166,11 @@ public class GameManager : MonoBehaviour
 
         _rightWalls = new Queue<GameObject>();//stores references to right wall objects, use them to know when the layer is destroyed and need to spawn new
 
-        Debug.Log(-4.5f * Screen.height / GlobalVariables.commonScreenHeight);
         int i = 0;
-        for (float currentY = -4.5f * Screen.height / GlobalVariables.commonScreenHeight; currentY < 7.5f * Screen.height / GlobalVariables.commonScreenHeight; currentY= currentY + 1 * Screen.height / GlobalVariables.commonScreenHeight)//make starting layers
+        GlobalVariables.ladderHeight = ladderRenderer.size.y * _ladders[0].transform.localScale.y;
+        for (float currentY = -Screen.height * _unitsPerPixel/ 2; 
+            currentY <= Screen.height * _unitsPerPixel/ 2 + GlobalVariables.ladderHeight; 
+            currentY+= GlobalVariables.ladderHeight)//make starting layers
         {
             if (i % 3 == 0)
             {
@@ -182,6 +184,8 @@ public class GameManager : MonoBehaviour
             }
             i++;
             _currentOrbSpawnCooldown--;
+            //Debug.Log($"current = {currentY}, {Screen.height * _unitsPerPixel / 2 + GlobalVariables.ladderHeight}");
+            //Debug.Log(currentY + GlobalVariables.ladderHeight<=Screen.height* _unitsPerPixel / 2 + GlobalVariables.ladderHeight);
         }
 
         highScoreText.text = PlayerPrefs.GetInt("HighScore", 0).ToString();
@@ -191,17 +195,6 @@ public class GameManager : MonoBehaviour
 
 
         onGameOverScreen = false;
-    }
-
-    private void Rescale(GameObject[] array)
-    {
-        Vector2 newScale = array[0].transform.localScale;
-        newScale.x = newScale.x * (Screen.width / GlobalVariables.commonScreenWidth);
-        newScale.y = newScale.y * (Screen.height / GlobalVariables.commonScreenHeight);
-        for (int j = 0; j < array.Length; j++)
-        {
-            array[j].transform.localScale = newScale;
-        }
     }
     public void SpawnBoulder()
     {
@@ -236,43 +229,45 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!PauseMenu.isPaused)
+        if (PauseMenu.isPaused)
         {
-            if ((Input.touchCount > 0 || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && !gameStarted)
-            {
-                Touch touch = Input.GetTouch(0);
-                if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-                {
-                    lockerButton.SetActive(false);
-                    pauseButton.SetActive(true);
-                    gameStarted = true;
-                    GlobalVariables.fallSpeed = 0.4f;
-                    TapToStartText.gameObject.SetActive(false);
-                    InvokeRepeating("SpawnBoulder", 10f, 10f);
-                }
-            }
-
-            scoreText.text = GlobalVariables.score.ToString();
-            gameOverScreenScore.text = GlobalVariables.score.ToString();
-            if (GlobalVariables.score > PlayerPrefs.GetInt("HighScore", 0))
-            {
-                PlayerPrefs.SetInt("HighScore", GlobalVariables.score);
-                highScoreText.text = GlobalVariables.score.ToString();
-            }
-
-            gemScoreText.text = GlobalVariables.gems.ToString();
-            PlayerPrefs.SetInt("GemScore", GlobalVariables.gems);
-
-            //_fallSpeed = GlobalVariables.fallSpeed;
-            if ((_rightWalls.Count > 0) && !_rightWalls.Peek().activeSelf)
-            {
-                SpawnLayer();
-                _rightWalls.Dequeue();
-            }
-
-            if (!GlobalVariables.gameIsRunning && !onGameOverScreen)
-                GameOver();
+            return;
         }
+
+        if ((Input.touchCount > 0 || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && !gameStarted)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            {
+                lockerButton.SetActive(false);
+                pauseButton.SetActive(true);
+                gameStarted = true;
+                GlobalVariables.fallSpeed = 0.4f;
+                TapToStartText.gameObject.SetActive(false);
+                InvokeRepeating("SpawnBoulder", 10f, 10f);
+            }
+        }
+
+        scoreText.text = GlobalVariables.score.ToString();
+        gameOverScreenScore.text = GlobalVariables.score.ToString();
+        if (GlobalVariables.score > PlayerPrefs.GetInt("HighScore", 0))
+        {
+            PlayerPrefs.SetInt("HighScore", GlobalVariables.score);
+            highScoreText.text = GlobalVariables.score.ToString();
+        }
+
+        gemScoreText.text = GlobalVariables.gems.ToString();
+        PlayerPrefs.SetInt("GemScore", GlobalVariables.gems);
+
+        //_fallSpeed = GlobalVariables.fallSpeed;
+        if ((_rightWalls.Count > 0) && !_rightWalls.Peek().activeSelf)
+        {
+            SpawnLayer();
+            _rightWalls.Dequeue();
+        }
+
+        if (!GlobalVariables.gameIsRunning && !onGameOverScreen)
+            GameOver();
     }
 
     public void SpawnCloud()
@@ -309,16 +304,16 @@ public class GameManager : MonoBehaviour
     }
     private void SpawnLayer()
     {
-        Vector2 spawnPosL = spawnPointLeft.position;
+        float spawnPos = Screen.height * _unitsPerPixel / 2 + GlobalVariables.ladderHeight;
 
         int randV = Random.Range(1, 4);
         if (randV % 3 == 0)
         {
-            SpawnThreeWalls(spawnPosL.y);
+            SpawnThreeWalls(spawnPos);
         }
         else
         {
-            SpawnTwoWalls(spawnPosL.y);
+            SpawnTwoWalls(spawnPos);
             lastLadderPosX2 = -100f;
             lastVerticalWallPosX = -100f;
         }
@@ -348,6 +343,7 @@ public class GameManager : MonoBehaviour
         GameObject ladder = _ladders[FindUnusedObject(_ladders)];
         ladderRenderer = ladder.GetComponent<SpriteRenderer>();
         Vector2 ladderSize = ladderRenderer.size;
+        
         int i = 0;
         do {
             if (i > 50)
@@ -364,7 +360,7 @@ public class GameManager : MonoBehaviour
         wallBoxCollider2D.size = newSizeR;
         wall.SetActive(true);
 
-        _ladderPosition.y = wall.transform.position.y - 0.373f * Screen.height/GlobalVariables.commonScreenHeight; //prew was 0.38f
+        _ladderPosition.y = wall.transform.position.y - 0.373f; //prew was 0.38f
         ladder.transform.position = _ladderPosition;
         ladder.SetActive(true);
 
@@ -409,34 +405,34 @@ public class GameManager : MonoBehaviour
             if (randomBGSpawn == 3)
             {
                 GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                float BGWallSpawnPosX = spawnPointLeft.transform.position.x + 0.5f * Screen.width/ GlobalVariables.commonScreenWidth;
+                float BGWallSpawnPosX = spawnPointLeft.transform.position.x + 0.5f;
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
 
                 BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                BGWallSpawnPosX = BGWallSpawnPosX + 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
+                BGWallSpawnPosX = BGWallSpawnPosX + 1f;// one becouse it the width of the BGWall
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
 
                 BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                BGWallSpawnPosX = BGWallSpawnPosX + 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
+                BGWallSpawnPosX = BGWallSpawnPosX + 1f;// one becouse it the width of the BGWall
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
             }
             else
             {
                 GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                float BGWallSpawnPosX = spawnPointRight.transform.position.x - 0.5f * Screen.width / GlobalVariables.commonScreenWidth;
+                float BGWallSpawnPosX = spawnPointRight.transform.position.x - 0.5f;
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
 
                 BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                BGWallSpawnPosX = BGWallSpawnPosX - 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
+                BGWallSpawnPosX = BGWallSpawnPosX - 1f;// one becouse it the width of the BGWall
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
 
                 BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-                BGWallSpawnPosX = BGWallSpawnPosX - 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
+                BGWallSpawnPosX = BGWallSpawnPosX - 1f;// one becouse it the width of the BGWall
                 BGWall.transform.position = new Vector2(BGWallSpawnPosX, spawnPosY + newSizeR.y * 0.5f + 0.5f);
                 BGWall.SetActive(true);
             }
@@ -591,24 +587,24 @@ public class GameManager : MonoBehaviour
         if (randomBGSpawn == 1)
         {
             GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-            float BGWallSpawnPosX = spawnPosMx + _verticalWallScale * Vsize.x * 0.5f + 0.5f * Screen.width / GlobalVariables.commonScreenWidth;
+            float BGWallSpawnPosX = spawnPosMx + _verticalWallScale * Vsize.x * 0.5f;
             BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
             BGWall.SetActive(true);
 
             BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-            BGWallSpawnPosX = BGWallSpawnPosX + 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
+            BGWallSpawnPosX = BGWallSpawnPosX + 1f;// one becouse it the width of the BGWall
             BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
             BGWall.SetActive(true);
         }
         else if(randomBGSpawn == 2)
         {
             GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-            float BGWallSpawnPosX = spawnPosMx - _verticalWallScale * Vsize.x * 0.5f - 0.5f * Screen.width / GlobalVariables.commonScreenWidth;
+            float BGWallSpawnPosX = spawnPosMx - _verticalWallScale * Vsize.x * 0.5f - 0.5f;
             BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
             BGWall.SetActive(true);
 
             BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-            BGWallSpawnPosX = BGWallSpawnPosX - 1f * Screen.width / GlobalVariables.commonScreenWidth;// one becouse it the width of the BGWall
+            BGWallSpawnPosX = BGWallSpawnPosX - 1f;// one becouse it the width of the BGWall
             BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
             BGWall.SetActive(true);
         }
@@ -655,11 +651,12 @@ public class GameManager : MonoBehaviour
         WallBehindLadderScript wallBScript2 = ladder2.GetComponent<WallBehindLadderScript>();
 
 
-        wallBScript1.wall = wallBehind1; 
+        wallBScript1.wall = wallBehind1;
         wallBScript1.otherWall = wallBehind2;
 
+
         wallBScript2.wall = wallBehind2;
-        wallBScript2.otherWall = wallBehind1;    
+        wallBScript2.otherWall = wallBehind1;
     }
 
     private void SpawnGem(GameObject wall, float lastLadderPosX1, float lastLadderPosX2, float lastVerticalVallPosX)
@@ -726,7 +723,16 @@ public class GameManager : MonoBehaviour
         return 0;
     }
 
-
+    private void Resize(GameObject[] obj)
+    {
+        for (int i = 0; i < obj.Length; i++)
+        {
+            objRenderer = obj[i].GetComponent<SpriteRenderer>();
+            Vector2 objSize = objRenderer.size;
+            objSize.x *= _screenWidthInUnits / GlobalVariables.commonScreenWidthInUnits;
+            objRenderer.size = objSize;
+        }
+    }
     public void GameOver()
     {
         onGameOverScreen = true;

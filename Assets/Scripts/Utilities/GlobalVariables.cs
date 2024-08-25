@@ -10,8 +10,6 @@ public class GlobalVariables : MonoBehaviour
     public static int timesSignShowed = 3;
 
     public static bool gameIsRunning = true;
-
-    public static float commonScreenWidth = 1170;
-    public static float commonScreenHeight = 2532;
-
+    public static float commonScreenWidthInUnits = 4.62f;
+    public static float ladderHeight;
 }
