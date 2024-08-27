@@ -188,7 +188,7 @@ public class GameManager : MonoBehaviour
             //Debug.Log(currentY + GlobalVariables.ladderHeight<=Screen.height* _unitsPerPixel / 2 + GlobalVariables.ladderHeight);
         }
 
-        highScoreText.text = PlayerPrefs.GetInt("HighScore", 0).ToString();
+		highScoreText.text = PlayerPrefs.GetInt("HighScore", 0).ToString();
         gemScoreText.text = PlayerPrefs.GetInt("GemScore", 0).ToString();
         GlobalVariables.gems = PlayerPrefs.GetInt("GemScore", 0);
         gemsCollected = 0;
