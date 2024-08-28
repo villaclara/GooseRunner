@@ -75,6 +75,8 @@ public class GameManager : MonoBehaviour
     public float ratioH, ratioW;
     private float _screenWidthInUnits;
     public CanvasGroup canvasGroup;
+    public GameObject enemy;
+    private int _enemySpawnCooldown = 7;
 
     // Start is called before the first frame update
 
@@ -323,8 +325,8 @@ public class GameManager : MonoBehaviour
         if (GlobalVariables.score % 3 == 0)
         {
             GlobalVariables.fallSpeed += 0.04f;//0.04
-            MainCharacterMovement.moveSpeed += 0.005f * Screen.width * 0.0001f;
-            MainCharacterMovement.moveSpeed += 0.005f * Screen.width * 0.0001f;
+            MainCharacterMovement.moveSpeed += 0.009f * _screenWidthInUnits / GlobalVariables.commonScreenWidthInUnits;
+            Debug.Log(MainCharacterMovement.moveSpeed);
         }
     }
 
@@ -363,6 +365,14 @@ public class GameManager : MonoBehaviour
         _ladderPosition.y = wall.transform.position.y - 0.373f; //prew was 0.38f
         ladder.transform.position = _ladderPosition;
         ladder.SetActive(true);
+
+        //ENEMY
+        if (_enemySpawnCooldown == 0)
+        {
+            Vector2 a = new Vector2(0, ladderRenderer.size.y);
+            Instantiate(enemy, _ladderPosition + a, Quaternion.identity);
+            _enemySpawnCooldown = 7;
+        }
 
         GameObject wallBehind = _wallsBehindLadder[FindUnusedObject(_wallsBehindLadder)];
         wallBehind.transform.position = new Vector2(_ladderPosition.x, spawnPosY);
@@ -470,6 +480,8 @@ public class GameManager : MonoBehaviour
         wallBScript.wall = wallBehind;
         wallBScript.otherWall = null;
 
+        _enemySpawnCooldown--;
+
     }
 
     private void SpawnThreeWalls(float spawnPosY)
@@ -506,6 +518,8 @@ public class GameManager : MonoBehaviour
         _ladderPosition.y = wall.transform.position.y - 0.373f;
         ladder1.transform.position = _ladderPosition;
         ladder1.SetActive(true);
+
+
 
         GameObject wallBehind1 = _wallsBehindLadder[FindUnusedObject(_wallsBehindLadder)];
         wallBehind1.transform.position = new Vector2(_ladderPosition.x, spawnPosY);
@@ -546,6 +560,9 @@ public class GameManager : MonoBehaviour
         _ladderPosition.y = wall.transform.position.y - 0.373f;
         ladder2.transform.position = _ladderPosition;
         ladder2.SetActive(true);
+
+
+
 
         GameObject wallBehind2 = _wallsBehindLadder[FindUnusedObject(_wallsBehindLadder)];
         wallBehind2.transform.position = new Vector2(_ladderPosition.x, spawnPosY);

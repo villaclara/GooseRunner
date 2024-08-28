@@ -105,12 +105,12 @@ public class MainCharacterMovement : MonoBehaviour
 
 				//Debug.Log($"position ({_body.position})");
 				//Debug.Log($"Screen width({Screen.width})");
-				// screen edge check
-				if (_body.position.x <= (-1 * Screen.width * unitsPerPixel / 2 - GetComponent<BoxCollider2D>().size.x))
+                // screen edge check
+                if (_body.position.x <= (-1 * Screen.width * unitsPerPixel / 2 - GetComponent<BoxCollider2D>().size.x/2))
 				{
 					_body.transform.position = new Vector2(Screen.width * unitsPerPixel / 2, _body.position.y);
 				}
-				else if (_body.position.x >= (Screen.width * unitsPerPixel / 2 + GetComponent<BoxCollider2D>().size.x))
+				else if (_body.position.x >= (Screen.width * unitsPerPixel / 2 + GetComponent<BoxCollider2D>().size.x/2))
 				{
 					_body.transform.position = new Vector2(-1 * Screen.width * unitsPerPixel / 2, _body.position.y);
 				}
@@ -200,7 +200,6 @@ public class MainCharacterMovement : MonoBehaviour
 
 
         }
-
 	}
 
 

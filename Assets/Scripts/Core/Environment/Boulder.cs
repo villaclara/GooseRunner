@@ -26,6 +26,5 @@ public class Boulder : MonoBehaviour
             GlobalVariables.gameIsRunning = false;
             MainCharacterMovement.isDead = true;
         }
-
     }
 }

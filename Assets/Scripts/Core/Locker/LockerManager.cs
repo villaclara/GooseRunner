@@ -24,7 +24,6 @@ public class LockerManager : MonoBehaviour
     public GameObject costPannel;
     public TextMeshProUGUI costText;
     private int _tappedSkinIndex;
-
     public TextMeshProUGUI gemsText;
     // Start is called before the first frame update
     void Start()
@@ -44,6 +43,8 @@ public class LockerManager : MonoBehaviour
 
         for (int i = 0; i < skins.Length; i++)
         {
+            if (StockCheck[i] == true)
+                skins[i].lockImage.SetActive(false);
             if (i == _chosenSkinIndex)
             {
                 skins[i].isChosen = true;
@@ -159,6 +160,7 @@ public class Skin
     public int cost;
     public bool isBought;
     public bool isChosen;
+    public GameObject lockImage;
 }
 
 
