@@ -6228,6 +6228,7 @@ MonoBehaviour:
   ratioH: 0
   ratioW: 0
   canvasGroup: {fileID: 1939513699}
+  enemy: {fileID: 2487479290365517726, guid: 900b4d8deca3c3a4f8c6304b33db2824, type: 3}
 --- !u!114 &520491735
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ TagManager:
   - SlowDownOrb
   - skinButton
   - blockBehindLadder
+  - enemy
   layers:
   - Default
   - TransparentFX
