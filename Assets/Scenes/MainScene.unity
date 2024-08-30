@@ -3714,6 +3714,7 @@ GameObject:
   - component: {fileID: 330723837}
   - component: {fileID: 330723843}
   - component: {fileID: 330723842}
+  - component: {fileID: 330723844}
   m_Layer: 0
   m_Name: CharacterAnimated
   m_TagString: Character
@@ -3736,6 +3737,7 @@ MonoBehaviour:
   isControlTapSystem: 1
   _body: {fileID: 0}
   gameManager: {fileID: 520491734}
+  moveToLadderCenter: 0
 --- !u!50 &330723838
 Rigidbody2D:
   serializedVersion: 4
@@ -3770,7 +3772,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330723836}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -3797,7 +3799,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.10535014, y: 0.0076144338}
+  m_Offset: {x: 0.12591198, y: 0.007614374}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -3807,7 +3809,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.98947024, y: 2.0299597}
+  m_Size: {x: 0.6193566, y: 2.0299597}
   m_EdgeRadius: 0
 --- !u!212 &330723840
 SpriteRenderer:
@@ -3912,6 +3914,43 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!70 &330723844
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330723836}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.12902254, y: 0.07867076}
+  m_Size: {x: 0.5744581, y: 2.2026505}
+  m_Direction: 0
 --- !u!1001 &331450551
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15713,6 +15752,7 @@ MonoBehaviour:
   isControlTapSystem: 1
   _body: {fileID: 0}
   gameManager: {fileID: 0}
+  moveToLadderCenter: 0
 --- !u!1 &1386702226 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4696058833426815396, guid: f472783063d62d74bbb2546bd75260a9, type: 3}

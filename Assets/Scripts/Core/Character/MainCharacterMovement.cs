@@ -12,18 +12,18 @@ public class MainCharacterMovement : MonoBehaviour
 {
 
 
-    [SerializeField]
-	public  static float moveSpeed = 1.5f;
+	[SerializeField]
+	public static float moveSpeed = 1.5f;
 
 
 	[SerializeField]
 	private bool isControlTapSystem = true;
-    private float _fallSpeed = GlobalVariables.fallSpeed;
+	private float _fallSpeed = GlobalVariables.fallSpeed;
 	private float _unitsPerPixel;
 
 	// RigidBody component of MainCharacter GameObject responsible for physics.
 	public Rigidbody2D _body;
-	private BoxCollider2D _bodyCollider2D;
+	private float _bodyColliderSizeX;
 
 	public static bool isDead;
 	public GameManager gameManager;
@@ -33,13 +33,13 @@ public class MainCharacterMovement : MonoBehaviour
 	private Direction _playerdirection = Direction.None;
 	private Direction _previousDirectionX = Direction.Right;
 	private float _prevMoveSpeed;
-	private bool _isLow; 
+	private bool _isLow;
 
 	float unitsPerPixel;
 
-    #region Touch Swipe Detection
+	#region Touch Swipe Detection
 
-    private Vector2 _startTouchPos = Vector2.zero;
+	private Vector2 _startTouchPos = Vector2.zero;
 	private Vector2 _endTouchPos = Vector2.zero;
 	private readonly float MIN_SWIPE_DISTANCE = 100f; // might be changed, random value from internet - 0.17f
 
@@ -58,19 +58,24 @@ public class MainCharacterMovement : MonoBehaviour
 	#endregion
 
 
+	private Vector2 _ladderPosition = Vector2.zero;
+
+	public bool moveToLadderCenter = true;
+
 	// Start is called before the first frame update
 	private void Start()
 	{
 		_isLow = false;
 		float _screenWidthInUnits = Camera.main.orthographicSize * 2 * Screen.width / Screen.height;
-        moveSpeed = 1.5f *  _screenWidthInUnits/GlobalVariables.commonScreenWidthInUnits;
+		moveSpeed = 1.5f * _screenWidthInUnits / GlobalVariables.commonScreenWidthInUnits;
 		Debug.Log($"move speed is {moveSpeed}");
 		// Get the RigidBody2D component for the Character GameObject.
 		_body = GetComponent<Rigidbody2D>();
 		_body.freezeRotation = true;
 		isDead = false;
 		unitsPerPixel = 2 * Camera.main.orthographicSize / Screen.height; // probably low value. multiplying by 2 on start because _camera.orthographicSize gives half of size of view
-	
+
+		_bodyColliderSizeX = GetComponent<BoxCollider2D>().size.x;
 	}
 
 	// Update is called once per frame
@@ -82,7 +87,7 @@ public class MainCharacterMovement : MonoBehaviour
 			moveSpeed = 2.3f;
 			_isLow = true;
 		}
-		if(transform.position.y > -2.5f && _isLow)
+		if (transform.position.y > -2.5f && _isLow)
 		{
 			moveSpeed = _prevMoveSpeed;
 			_isLow = false;
@@ -97,9 +102,9 @@ public class MainCharacterMovement : MonoBehaviour
 		{
 			CheckSwipeInputSystem();
 		}
-	
-				
-		if(!PauseMenu.isPaused && GameManager.gameStarted)
+
+
+		if (!PauseMenu.isPaused && GameManager.gameStarted)
 		{
 			_fallSpeed = GlobalVariables.fallSpeed;
 			Vector2 newPosition = transform.position;
@@ -115,18 +120,15 @@ public class MainCharacterMovement : MonoBehaviour
 
 			if (!isDead)
 			{
-				CheckKeyboardInputSystem();
-
-
 
 				//Debug.Log($"position ({_body.position})");
 				//Debug.Log($"Screen width({Screen.width})");
-                // screen edge check
-                if (_body.position.x <= (-1 * Screen.width * unitsPerPixel / 2 - GetComponent<BoxCollider2D>().size.x/2))
+				// screen edge check
+				if (_body.position.x <= (-1 * Screen.width * unitsPerPixel / 2 - _bodyColliderSizeX / 2))
 				{
 					_body.transform.position = new Vector2(Screen.width * unitsPerPixel / 2, _body.position.y);
 				}
-				else if (_body.position.x >= (Screen.width * unitsPerPixel / 2 + GetComponent<BoxCollider2D>().size.x/2))
+				else if (_body.position.x >= (Screen.width * unitsPerPixel / 2 + _bodyColliderSizeX / 2))
 				{
 					_body.transform.position = new Vector2(-1 * Screen.width * unitsPerPixel / 2, _body.position.y);
 				}
@@ -135,25 +137,31 @@ public class MainCharacterMovement : MonoBehaviour
 				MoveCharacter(_playerdirection);
 
 			}
-        }
-    }
+		}
+	}
 
 
-    private void MoveCharacter(Direction direction)
+	private void MoveCharacter(Direction direction)
 	{
-			if (direction == Direction.Left || direction == Direction.Right)
-			{
-				// Face proper side and move character via its component.
-				_body.transform.localScale = new Vector3(Mathf.Abs(_body.transform.localScale.x) * (int)direction, _body.transform.localScale.y, _body.transform.localScale.z); // Mathf.Abs to get positive value
-				_body.velocity = new Vector2(moveSpeed * (int)direction, _body.velocity.y);
-				return;
-			}
+		if (direction == Direction.Left || direction == Direction.Right)
+		{
+			// Face proper side and move character via its component.
+			_body.transform.localScale = new Vector3(Mathf.Abs(_body.transform.localScale.x) * (int)direction, _body.transform.localScale.y, _body.transform.localScale.z); // Mathf.Abs to get positive value
+			_body.velocity = new Vector2(moveSpeed * (int)direction, _body.velocity.y);
+			return;
+		}
 
 		if (direction == Direction.Up || direction == Direction.Down)
 		{
 			var currentPos = _body.transform.position;
 
 			currentPos.y = direction == Direction.Up ? currentPos.y + (_fallSpeed + 5f) * Time.deltaTime : currentPos.y - 5f * Time.deltaTime;
+
+			if (moveToLadderCenter)
+			{
+				currentPos.x = _ladderPosition.x;
+			}
+
 			_body.transform.position = currentPos;
 			return;
 		}
@@ -162,29 +170,31 @@ public class MainCharacterMovement : MonoBehaviour
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
 
-        //GameObject hitObject = collision.gameObject;
-        //Debug.Log("Character collided with: " + hitObject.name);
+		//GameObject hitObject = collision.gameObject;
+		//Debug.Log($"collided ({_body.transform.position}) with: {hitObject.name} ({hitObject.transform.position}).");
 
-        // Reverses direction of character when got collision with vertical wall.
-        if (collision.gameObject.CompareTag("VerticalWall"))
+		// Reverses direction of character when got collision with vertical wall.
+		if (collision.gameObject.CompareTag("VerticalWall"))
 		{
 			_playerdirection = _playerdirection == Direction.Left ? Direction.Right : Direction.Left;
 			_previousDirectionX = _playerdirection;
 			_body.transform.localScale = new Vector3(Mathf.Abs(_body.transform.localScale.x) * (int)_playerdirection, _body.transform.localScale.y, _body.transform.localScale.z); // Mathf.Abs to get positive value
-			//Debug.Log($"Change character direction to ({_playerdirection}).");
+																																												   //Debug.Log($"Change character direction to ({_playerdirection}).");
 		}
-    }
+	}
 
 
 
 	private void OnTriggerEnter2D(Collider2D other)
 	{
-		
+
 		// Ladder Collision to be able to move upside.
-		if(other.gameObject.CompareTag("Ladder"))
+		if (other.gameObject.CompareTag("Ladder"))
 		{
 			//Debug.Log($"Character inside ladder({_characterInsideLadder}).");
 			_characterInsideLadder = true;
+
+			_ladderPosition = other.transform.position;
 		}
 
 	}
@@ -216,10 +226,10 @@ public class MainCharacterMovement : MonoBehaviour
 			if (otherWallBehind != null && otherCollider.gameObject.transform.position.y <= _body.transform.position.y)
 			{
 				otherWallBehind.GetComponent<BoxCollider2D>().isTrigger = false;
-            }
+			}
 
 
-        }
+		}
 	}
 
 
@@ -282,93 +292,6 @@ public class MainCharacterMovement : MonoBehaviour
 	/// </summary>
 	private void CheckSwipeInputSystem()
 	{
-
-		// Change direction of the movement
-		if (Input.GetKey(KeyCode.A)) 
-		{
-			_playerdirection = Direction.Left;
-			_previousDirectionX = Direction.Left;
-			Debug.Log($"A pressed. Direction ({_playerdirection}). localscale({transform.localScale}).");
-		}
-
-		if (Input.GetKey(KeyCode.D))
-		{
-			_playerdirection = Direction.Right;
-			_previousDirectionX = Direction.Right;
-			Debug.Log($"D pressed. Direction ({_playerdirection}). localscale({transform.localScale}).");
-		}	
-
-		if(Input.GetKey(KeyCode.W))
-		{
-			if(_characterInsideLadder)
-			{
-				_playerdirection = Direction.Up;
-			}
-
-		}
-
-
-		//// TOUCH INPUT
-		
-
-
-		// Change direction of the movement
-		if (Input.GetKey(KeyCode.A)) 
-		{
-			_playerdirection = Direction.Left;
-			_previousDirectionX = Direction.Left;
-			//Debug.Log($"A pressed. Direction ({_playerdirection}). localscale({transform.localScale}).");
-		}
-
-		if (Input.GetKey(KeyCode.D))
-		{
-			_playerdirection = Direction.Right;
-			_previousDirectionX = Direction.Right;
-			//Debug.Log($"D pressed. Direction ({_playerdirection}). localscale({transform.localScale}).");
-		}	
-
-		if(Input.GetKey(KeyCode.W))
-		{
-			if(_characterInsideLadder)
-			{
-				_playerdirection = Direction.Up;
-	
-			}
-
-		}
-
-
-		//// TOUCH INPUT
-		
-
-
-		// Change direction of the movement
-		if (Input.GetKey(KeyCode.A)) 
-		{
-			_playerdirection = Direction.Left;
-			_previousDirectionX = Direction.Left;
-			Debug.Log($"A pressed. Direction ({_playerdirection}). localscale({transform.localScale}).");
-		}
-
-		if (Input.GetKey(KeyCode.D))
-		{
-			_playerdirection = Direction.Right;
-			_previousDirectionX = Direction.Right;
-			Debug.Log($"D pressed. Direction ({_playerdirection}). localscale({transform.localScale}).");
-		}	
-
-		if(Input.GetKey(KeyCode.W))
-		{
-			if(_characterInsideLadder)
-			{
-				_playerdirection = Direction.Up;
-			}
-
-		}
-
-
-		//// TOUCH INPUT
-		
 
 		// Reset positions variables if no input received at current Frame.
 		if (Input.touchCount == 0)
