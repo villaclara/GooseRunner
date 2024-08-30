@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7efa6541c1a2a5c4a98d020e50c21867
+guid: c84431bae8d7bd34f94698da85d75c4e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3601546126906379266
-    second: black_square_0
+      213: 6577818861240062052
+    second: bgLocker_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: black_square_0
+      name: bgLocker_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1152
-        height: 648
+        width: 1080
+        height: 1920
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -127,8 +127,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 20c4070ee134bf130800000000000000
-      internalID: 3601546126906379266
+      spriteID: 460141d476b194b50800000000000000
+      internalID: 6577818861240062052
       vertices: []
       indices: 
       edges: []
@@ -143,8 +143,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      black_square_0: 3601546126906379266
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,14 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
+
 using TMPro;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 public class BackgroundText : MonoBehaviour
 {
     private Vector2 spawnpos;
     private Vector2 newpos;
+    string hexColor1 = "#d3fc7e";
+    string hexColor2 = "#ea323c";
+    string hexColor3 = "#ffeb57";
     // Start is called before the first frame update
     void Start()
     {
@@ -23,13 +23,17 @@ public class BackgroundText : MonoBehaviour
         TextMeshProUGUI textMeshPro = secondChildObject.GetComponent<TextMeshProUGUI>();
         if (textMeshPro != null)
         {
+            Color newColor;
+            string hexColor = "#ffffff";
             int randColor = Random.Range(1, 4);
             if (randColor == 1)
-                textMeshPro.color = Color.red;
+                hexColor = hexColor1;
             if (randColor == 2)
-                textMeshPro.color = Color.green;
+                hexColor = hexColor2;
             if (randColor == 3)
-                textMeshPro.color = Color.yellow;
+                hexColor = hexColor3;
+            UnityEngine.ColorUtility.TryParseHtmlString(hexColor, out newColor);
+            textMeshPro.color = newColor;
         }
     }
 

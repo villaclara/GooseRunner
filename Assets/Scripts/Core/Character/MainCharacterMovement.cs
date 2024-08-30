@@ -32,7 +32,8 @@ public class MainCharacterMovement : MonoBehaviour
 	// 1 -> facing right, -1 -> facing left.
 	private Direction _playerdirection = Direction.None;
 	private Direction _previousDirectionX = Direction.Right;
-
+	private float _prevMoveSpeed;
+	private bool _isLow; 
 
 	float unitsPerPixel;
 
@@ -60,6 +61,7 @@ public class MainCharacterMovement : MonoBehaviour
 	// Start is called before the first frame update
 	private void Start()
 	{
+		_isLow = false;
 		float _screenWidthInUnits = Camera.main.orthographicSize * 2 * Screen.width / Screen.height;
         moveSpeed = 1.5f *  _screenWidthInUnits/GlobalVariables.commonScreenWidthInUnits;
 		Debug.Log($"move speed is {moveSpeed}");
@@ -74,14 +76,28 @@ public class MainCharacterMovement : MonoBehaviour
 	// Update is called once per frame
 	private void Update()
 	{
-				if (isControlTapSystem)
-				{
-					CheckTapInputSystem();
-				}
-				else
-				{
-					CheckSwipeInputSystem();
-				}
+		if (transform.position.y < -2.5f && !_isLow)
+		{
+			_prevMoveSpeed = moveSpeed;
+			moveSpeed = 2.3f;
+			_isLow = true;
+		}
+		if(transform.position.y > -2.5f && _isLow)
+		{
+			moveSpeed = _prevMoveSpeed;
+			_isLow = false;
+		}
+
+
+		if (isControlTapSystem)
+		{
+			CheckTapInputSystem();
+		}
+		else
+		{
+			CheckSwipeInputSystem();
+		}
+	
 				
 		if(!PauseMenu.isPaused && GameManager.gameStarted)
 		{
@@ -145,8 +161,12 @@ public class MainCharacterMovement : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		// Reverses direction of character when got collision with vertical wall.
-		if (collision.gameObject.CompareTag("VerticalWall"))
+
+        //GameObject hitObject = collision.gameObject;
+        //Debug.Log("Character collided with: " + hitObject.name);
+
+        // Reverses direction of character when got collision with vertical wall.
+        if (collision.gameObject.CompareTag("VerticalWall"))
 		{
 			_playerdirection = _playerdirection == Direction.Left ? Direction.Right : Direction.Left;
 			_previousDirectionX = _playerdirection;
