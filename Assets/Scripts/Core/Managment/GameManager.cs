@@ -29,8 +29,10 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer wallSpriteRenderer;
     public SpriteRenderer ladderRenderer;
     public SpriteRenderer verticalWallRenderer;
-    private SpriteRenderer objRenderer;
+    public SpriteRenderer wallBehindLadderRenderer;
+    private SpriteRenderer _objRenderer;
     public BoxCollider2D wallBoxCollider2D;
+    public BoxCollider2D wallBehindLadderCollider2D;
     private float _wallScale, _ladderScaleX, _verticalWallScale;//wall h64px w256px,  ladder h300px w100px 16x48
     private Vector2 _ladderPosition;
     //private float _fallSpeed = GlobalVariables.fallSpeed;
@@ -59,12 +61,10 @@ public class GameManager : MonoBehaviour
     public SceneController sceneController;
     public GameObject pauseButton;
     public GameObject restartButton;
-    public GameObject bgTree1, bgTree2, bgTree3, bgGrass, bgLeftHouse, bgRightHouse;
+    public GameObject bgGrass, bgLeftHouse, bgRightHouse;
     public RectTransform pausePannelRectTransform;
     public TextMeshProUGUI gameOverScreenScore;
     public TextMeshProUGUI gameOverScreenGemsCollected;
-    public TextMeshProUGUI hintText1;
-    public TextMeshProUGUI hintText2;
     public static int gemsCollected;
     private bool onGameOverScreen;
     public GameObject cloud;
@@ -95,8 +95,7 @@ public class GameManager : MonoBehaviour
 
 
         TapToStartText.gameObject.SetActive(true);
-        hintText1.gameObject.SetActive(true);
-        hintText2.gameObject.SetActive(true);
+        
 
         gameStarted = false;
         GlobalVariables.fallSpeed = 0f;
@@ -144,15 +143,6 @@ public class GameManager : MonoBehaviour
 
         SpriteRenderer bgLeftHouseR = bgLeftHouse.GetComponent<SpriteRenderer>();
         bgLeftHouseR.size = new Vector2(fullScreenWidth * 0.3f, (Screen.height * _unitsPerPixel) * 1.1f);
-
-        SpriteRenderer bgTree1R = bgTree1.GetComponent<SpriteRenderer>();
-        bgTree1R.size = new Vector2(fullScreenWidth * 0.4f, (Screen.height * _unitsPerPixel) * 0.4f);
-
-        SpriteRenderer bgTree2R = bgTree2.GetComponent<SpriteRenderer>();
-        bgTree2R.size = new Vector2(fullScreenWidth * 0.4f, (Screen.height * _unitsPerPixel) * 0.4f);
-
-        SpriteRenderer bgTree3R = bgTree3.GetComponent<SpriteRenderer>();
-        bgTree3R.size = new Vector2(fullScreenWidth * 0.2f, (Screen.height * _unitsPerPixel) * 0.3f);
 
         SpriteRenderer bgGrassR = bgGrass.GetComponent<SpriteRenderer>();
         bgGrassR.size = new Vector2(fullScreenWidth * 1.1f, (Screen.height * _unitsPerPixel) * 0.2f);
@@ -369,13 +359,16 @@ public class GameManager : MonoBehaviour
         //ENEMY
         if (_enemySpawnCooldown == 0)
         {
-            Vector2 a = new Vector2(0, ladderRenderer.size.y);
+            Vector2 a = new Vector2(0, ladderRenderer.size.y * 0.8f);
             Instantiate(enemy, _ladderPosition + a, Quaternion.identity);
             _enemySpawnCooldown = 7;
         }
 
         GameObject wallBehind = _wallsBehindLadder[FindUnusedObject(_wallsBehindLadder)];
         wallBehind.transform.position = new Vector2(_ladderPosition.x, spawnPosY);
+        wallBehindLadderCollider2D = wallBehind.GetComponent<BoxCollider2D>();
+        Vector2 wallBehindLadderSize = wallBehindLadderRenderer.size;
+        wallBehindLadderCollider2D.size = wallBehindLadderSize;
         wallBehind.SetActive(true);
 
         _rightWalls.Enqueue(wall);
@@ -523,6 +516,9 @@ public class GameManager : MonoBehaviour
 
         GameObject wallBehind1 = _wallsBehindLadder[FindUnusedObject(_wallsBehindLadder)];
         wallBehind1.transform.position = new Vector2(_ladderPosition.x, spawnPosY);
+        wallBehindLadderCollider2D = wallBehind1.GetComponent<BoxCollider2D>();
+        Vector2 wallBehindLadderSize = wallBehindLadderRenderer.size;
+        wallBehindLadderCollider2D.size = wallBehindLadderSize;
         wallBehind1.SetActive(true);
         ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -566,6 +562,9 @@ public class GameManager : MonoBehaviour
 
         GameObject wallBehind2 = _wallsBehindLadder[FindUnusedObject(_wallsBehindLadder)];
         wallBehind2.transform.position = new Vector2(_ladderPosition.x, spawnPosY);
+        wallBehindLadderCollider2D = wallBehind2.GetComponent<BoxCollider2D>();
+        wallBehindLadderSize = wallBehindLadderRenderer.size;
+        wallBehindLadderCollider2D.size = wallBehindLadderSize;
         wallBehind2.SetActive(true);
 
         lastLadderPosX2 = _ladderPosition.x;
@@ -744,10 +743,10 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < obj.Length; i++)
         {
-            objRenderer = obj[i].GetComponent<SpriteRenderer>();
-            Vector2 objSize = objRenderer.size;
+            _objRenderer = obj[i].GetComponent<SpriteRenderer>();
+            Vector2 objSize = _objRenderer.size;
             objSize.x *= _screenWidthInUnits / GlobalVariables.commonScreenWidthInUnits;
-            objRenderer.size = objSize;
+            _objRenderer.size = objSize;
         }
     }
     public void GameOver()

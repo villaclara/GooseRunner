@@ -10,9 +10,11 @@ public class LevelEnemy : MonoBehaviour
     private float _unitsPerPixel;
     private float _moveSpeed = 0.7f;
     private float _additionalFallSpeed = 0.3f;
+    private bool gameOver;
     // Start is called before the first frame update
     void Start()
     {
+        gameOver = false;
         if (transform.position.x > 0)
             _moveSpeed = -_moveSpeed;
 
@@ -23,7 +25,7 @@ public class LevelEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!PauseMenu.isPaused && GameManager.gameStarted)
+        if (!PauseMenu.isPaused && GameManager.gameStarted && gameOver)
         {
             _fallSpeed = GlobalVariables.fallSpeed + _additionalFallSpeed;
             Vector2 newPosition = transform.position;
@@ -60,6 +62,7 @@ public class LevelEnemy : MonoBehaviour
         {
             GlobalVariables.gameIsRunning = false;
             MainCharacterMovement.isDead = true;
+            gameOver = true;
         }
     }
 }
