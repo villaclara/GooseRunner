@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using UnityEditor;
 using UnityEngine;
 
 public class OrbsBehaviour : MonoBehaviour
@@ -9,8 +9,13 @@ public class OrbsBehaviour : MonoBehaviour
     private const string _speedUpTag = "SpeedUpOrb";
     private const string _slowDownTag = "SlowDownOrb";
 
+    public static event Action OnSpeedUpOrbPickUp;
+    public static event Action OnSlowDownOrbPickUp;
+
+
     void Update()
     {
+        
         if (!PauseMenu.isPaused)
         {
             _fallSpeed = GlobalVariables.fallSpeed;
@@ -34,7 +39,7 @@ public class OrbsBehaviour : MonoBehaviour
             GlobalVariables.fallSpeed += 0.08f;
             MainCharacterMovement.moveSpeed += 0.01f + Screen.width * 0.0001f;
             Debug.Log($"Speed now {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
-
+            OnSpeedUpOrbPickUp?.Invoke();
         }
 
         if (other.gameObject.CompareTag(_Tag) && gameObject.CompareTag(_slowDownTag))
@@ -45,9 +50,12 @@ public class OrbsBehaviour : MonoBehaviour
             GlobalVariables.fallSpeed -= 0.16f;
             MainCharacterMovement.moveSpeed -= 0.04f + Screen.width * 0.0001f;
             Debug.Log($"Speed now {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
-
-
+            OnSlowDownOrbPickUp?.Invoke();
         }
 
     }
+
+
+    
+    
 }

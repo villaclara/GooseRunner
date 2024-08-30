@@ -33,6 +33,12 @@ public class LockerManager : MonoBehaviour
         _chosenSkinIndex = PlayerPrefs.GetInt("SkinIndex", 0);
 
         StockCheck = new bool[skins.Length];
+        //for(int i = 1; i<skins.Length; i++) //reset bought skins
+        //{
+        //    StockCheck[i] = false;
+        //}
+        //SaveStock();
+        //PlayerPrefs.SetInt("GemScore", 200);
 
         if (PlayerPrefs.HasKey("StockArray"))
             StockCheck = PlayerPrefsX.GetBoolArray("StockArray");
@@ -122,6 +128,7 @@ public class LockerManager : MonoBehaviour
                     StockCheck[_tappedSkinIndex] = true;
                     skins[_tappedSkinIndex].isBought = true;
                     SaveStock();
+                    skins[_tappedSkinIndex].lockImage.SetActive(false);
                     selectButtonText.text = "SELECT";
                     costPannel.SetActive(false);
                 }

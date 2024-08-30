@@ -25,7 +25,7 @@ public class LevelEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!PauseMenu.isPaused && GameManager.gameStarted && gameOver)
+        if (!PauseMenu.isPaused && GameManager.gameStarted && !gameOver)
         {
             _fallSpeed = GlobalVariables.fallSpeed + _additionalFallSpeed;
             Vector2 newPosition = transform.position;
@@ -41,6 +41,9 @@ public class LevelEnemy : MonoBehaviour
             if (Mathf.Abs(transform.position.x) >= Screen.width * _unitsPerPixel / 2)
                 _moveSpeed = -_moveSpeed;
         }
+
+        if (!gameObject.activeSelf)
+            Destroy(gameObject);
     }
 
     private void ChangeSign()

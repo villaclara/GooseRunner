@@ -6,8 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -76,6 +75,7 @@ public class GameManager : MonoBehaviour
     private float _screenWidthInUnits;
     public CanvasGroup canvasGroup;
     public GameObject enemy;
+    public CanvasGroup speedUpSides, slowDownSides;
     private int _enemySpawnCooldown = 7;
 
     // Start is called before the first frame update
@@ -312,11 +312,14 @@ public class GameManager : MonoBehaviour
         _currentGemSpawnCooldown--;
         _currentOrbSpawnCooldown--;
 
-        if (GlobalVariables.score % 3 == 0)
+
+
+        if (GlobalVariables.score % 3 == 0 && GlobalVariables.fallSpeed <= 1.5f)
         {
             GlobalVariables.fallSpeed += 0.04f;//0.04
+            Debug.Log($"fallSpeed{GlobalVariables.fallSpeed}");
             MainCharacterMovement.moveSpeed += 0.009f * _screenWidthInUnits / GlobalVariables.commonScreenWidthInUnits;
-            Debug.Log(MainCharacterMovement.moveSpeed);
+            Debug.Log($"characte speed{MainCharacterMovement.moveSpeed}");
         }
     }
 
