@@ -34,4 +34,24 @@ public class levelItemsBehaviour : MonoBehaviour
             }
         }
     }
+
+	//private void OnCollisionEnter2D(Collision2D collision)
+	//{
+	//	Debug.Log("ONCOLLISION ENTER EMPTY");
+
+	//	if (this.tag == "wall")
+ //       {
+ //           if(CompareTag("Character"))
+ //           {
+ //               Debug.Log("ONCOLLISION ENTER CHARACTER");
+ //               collision.transform.SetParent(transform);
+ //           }
+ //       }
+	//}
+
+
+	//private void OnCollisionExit2D(Collision2D collision)
+	//{
+ //       collision.transform.SetParent(null);
+	//}
 }
