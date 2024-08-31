@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     public CanvasGroup speedUpSides, slowDownSides;
     private int _enemySpawnCooldown = 7;
 
-    // Start is called before the first frame update
+
 
     /// <summary>
     /// IF YOU TAKE SIZE FROM SPRITE RENDERER THEN MULTYPLY IT BY OBJECTS SCALE
@@ -787,9 +787,20 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+        GlobalVariables.gamePlayed++;
+        if (GlobalVariables.gamePlayed % 3 == 0)
+        {
+            AdManager.Instance.interstitialAds.ShowInterstitialAd();
+        }
         StartCoroutine(sceneController.FadeInScreen());
         SceneManager.LoadScene(0);
         GlobalVariables.score = 0;
+    }
+
+
+    public void MultiplyGems()
+    {
+        AdManager.Instance.rewardedAds.ShowRewardedAd();
     }
 
     private void GetFPS()
