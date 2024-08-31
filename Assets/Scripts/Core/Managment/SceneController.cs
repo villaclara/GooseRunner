@@ -6,6 +6,11 @@ using UnityEngine.SceneManagement;
 public class SceneController : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
+    AudioManager audioManager;
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
     public void LoadLockerScene()
     {
         StartCoroutine(FadeInScreen());
@@ -14,6 +19,7 @@ public class SceneController : MonoBehaviour
 
     public void LoadMainScene()
     {
+        audioManager.PlaySFX(audioManager.buttonPressed);
         StartCoroutine(FadeInScreen());
         SceneManager.LoadScene(0);
     }

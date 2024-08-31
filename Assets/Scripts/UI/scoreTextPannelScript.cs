@@ -7,10 +7,12 @@ public class testScript : MonoBehaviour
     public GameObject scorePannel;
     public GameObject gemsPannel;
     private Animator animator;
+    AudioManager audioManager;
     // Start is called before the first frame update
     void Start()
     {
         animator = scorePannel.GetComponent<Animator>();
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     // Update is called once per frame
@@ -22,6 +24,7 @@ public class testScript : MonoBehaviour
 
     public void StartGemsPannelAnim()
     {
+        audioManager.PlaySFX(audioManager.pannelSlide);
         animator = gemsPannel.GetComponent<Animator>();
         animator.SetTrigger("activate");
     }

@@ -12,6 +12,12 @@ public class OrbsBehaviour : MonoBehaviour
     public static event Action OnSpeedUpOrbPickUp;
     public static event Action OnSlowDownOrbPickUp;
 
+    AudioManager audioManager;
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
 
     void Update()
     {
@@ -34,6 +40,7 @@ public class OrbsBehaviour : MonoBehaviour
     {
         if (other.gameObject.CompareTag(_Tag) && gameObject.CompareTag(_speedUpTag))
         {
+            audioManager.PlaySFX(audioManager.speedUpOrbPickUp);
             Debug.Log($"Speed was {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
             Destroy(gameObject);
             GlobalVariables.fallSpeed += 0.08f;
@@ -44,8 +51,8 @@ public class OrbsBehaviour : MonoBehaviour
 
         if (other.gameObject.CompareTag(_Tag) && gameObject.CompareTag(_slowDownTag))
         {
+            audioManager.PlaySFX(audioManager.slowDownOrbPickUp);
             Debug.Log($"Speed was {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
-
             Destroy(gameObject);
             GlobalVariables.fallSpeed -= 0.16f;
             MainCharacterMovement.moveSpeed -= 0.04f + Screen.width * 0.0001f;

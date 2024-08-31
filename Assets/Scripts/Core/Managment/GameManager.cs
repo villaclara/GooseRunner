@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
     public SceneController sceneController;
     public GameObject pauseButton;
     public GameObject restartButton;
+    public Button adButton;
     public GameObject bgGrass, bgLeftHouse, bgRightHouse;
     public RectTransform pausePannelRectTransform;
     public TextMeshProUGUI gameOverScreenScore;
@@ -77,7 +78,8 @@ public class GameManager : MonoBehaviour
     public GameObject enemy;
     public CanvasGroup speedUpSides, slowDownSides;
     private int _enemySpawnCooldown = 7;
-
+    
+    AudioManager audioManager;
 
 
     /// <summary>
@@ -86,7 +88,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-       
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+
         StartCoroutine(sceneController.FadeOutScreen());
         
 
@@ -211,8 +214,8 @@ public class GameManager : MonoBehaviour
         AttentionSign.anchoredPosition = attentionSignPos;
 
         GlobalVariables.timesSignShowed = 0;
-        yield return StartCoroutine(attentionSign.ShowSignCoroutine());
         yield return new WaitUntil(() => !PauseMenu.isPaused);
+        yield return StartCoroutine(attentionSign.ShowSignCoroutine());
 
         Debug.Log("boulder");
         Instantiate(boulder, boulderSpawnPos, Quaternion.identity);
@@ -774,7 +777,12 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
+        audioManager.PlaySFX(audioManager.pannelSlide);
         onGameOverScreen = true;
+
+        if (gemsCollected == 0)
+            adButton.interactable = false;
+
         gameOverScreenGemsCollected.text += gemsCollected.ToString();
         scoreText.enabled = false;
         gameOverUI.SetActive(true);
@@ -787,6 +795,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+        //audioManager.PlaySFX(audioManager.buttonPressed);
         GlobalVariables.gamePlayed++;
         if (GlobalVariables.gamePlayed % 3 == 0)
         {
@@ -800,6 +809,7 @@ public class GameManager : MonoBehaviour
 
     public void MultiplyGems()
     {
+        //audioManager.PlaySFX(audioManager.buttonPressed);
         AdManager.Instance.rewardedAds.ShowRewardedAd();
     }
 
