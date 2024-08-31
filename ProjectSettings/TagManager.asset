@@ -14,6 +14,7 @@ TagManager:
   - skinButton
   - blockBehindLadder
   - enemy
+  - Audio
   layers:
   - Default
   - TransparentFX

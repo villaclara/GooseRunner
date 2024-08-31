@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class ShowSides : MonoBehaviour
 {
-    // Start is called before the first frame update
     public CanvasGroup canvGroupSpeedUp;
     public CanvasGroup canvGroupSlowDown;
 
-    private void Start()
+    private void Awake()
     {
         OrbsBehaviour.OnSpeedUpOrbPickUp += ShowSideSpeedUp;
         OrbsBehaviour.OnSlowDownOrbPickUp += ShowSideSlowDown;
