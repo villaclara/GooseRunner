@@ -359,6 +359,10 @@ public class GameManager : MonoBehaviour
         ladder.transform.position = _ladderPosition;
         ladder.SetActive(true);
 
+
+        
+
+
         //ENEMY
         if (_enemySpawnCooldown == 0)
         {
@@ -374,7 +378,11 @@ public class GameManager : MonoBehaviour
         wallBehindLadderCollider2D.size = wallBehindLadderSize;
         wallBehind.SetActive(true);
 
-        _rightWalls.Enqueue(wall);
+		// Set WallBehind as 'IsTrigger = False' when the WallBehind (Ladder) spawned below Character
+        // IDK if I'm right
+		SetWallBehindLadderCollisionIfBelowPlayer(wallBehind);
+
+		_rightWalls.Enqueue(wall);
         lastLadderPosX1 = _ladderPosition.x;
 
 
@@ -480,7 +488,15 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void SpawnThreeWalls(float spawnPosY)
+	private void SetWallBehindLadderCollisionIfBelowPlayer(GameObject wallBehindLadder)
+	{
+		if(wallBehindLadder.transform.position.y <= characterTransform.position.y)
+        {
+            wallBehindLadder.GetComponent<BoxCollider2D>().isTrigger = false;
+        }
+	}
+
+	private void SpawnThreeWalls(float spawnPosY)
     {
         GameObject wall = _walls[FindUnusedObject(_walls)];
         wallSpriteRenderer = wall.GetComponent<SpriteRenderer>();
@@ -515,19 +531,21 @@ public class GameManager : MonoBehaviour
         ladder1.transform.position = _ladderPosition;
         ladder1.SetActive(true);
 
-
-
         GameObject wallBehind1 = _wallsBehindLadder[FindUnusedObject(_wallsBehindLadder)];
         wallBehind1.transform.position = new Vector2(_ladderPosition.x, spawnPosY);
         wallBehindLadderCollider2D = wallBehind1.GetComponent<BoxCollider2D>();
         Vector2 wallBehindLadderSize = wallBehindLadderRenderer.size;
         wallBehindLadderCollider2D.size = wallBehindLadderSize;
         wallBehind1.SetActive(true);
-        ///////////////////////////////////////////////////////////////////////////////////////////
+
+		// Set WallBehind as 'IsTrigger = False' when the WallBehind (Ladder) spawned below Character
+		// IDK if I'm right
+		SetWallBehindLadderCollisionIfBelowPlayer(wallBehind1);
+		///////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-        wall = _walls[FindUnusedObject(_walls)];
+		wall = _walls[FindUnusedObject(_walls)];
         wallSpriteRenderer = wall.GetComponent<SpriteRenderer>();
         wallBoxCollider2D = wall.GetComponent<BoxCollider2D>();
         Vector2 newSizeL = wallSpriteRenderer.size;
@@ -562,7 +580,6 @@ public class GameManager : MonoBehaviour
 
 
 
-
         GameObject wallBehind2 = _wallsBehindLadder[FindUnusedObject(_wallsBehindLadder)];
         wallBehind2.transform.position = new Vector2(_ladderPosition.x, spawnPosY);
         wallBehindLadderCollider2D = wallBehind2.GetComponent<BoxCollider2D>();
@@ -570,7 +587,10 @@ public class GameManager : MonoBehaviour
         wallBehindLadderCollider2D.size = wallBehindLadderSize;
         wallBehind2.SetActive(true);
 
-        lastLadderPosX2 = _ladderPosition.x;
+		SetWallBehindLadderCollisionIfBelowPlayer(wallBehind2);
+
+
+		lastLadderPosX2 = _ladderPosition.x;
         _ladderPosition = ladder1.transform.position;
         lastLadderPosX1 = _ladderPosition.x;
         //////////////////////////////////////////////////////////////////////////////
