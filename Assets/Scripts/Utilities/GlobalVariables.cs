@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GlobalVariables : MonoBehaviour
@@ -12,4 +13,5 @@ public class GlobalVariables : MonoBehaviour
     public static bool gameIsRunning = true;
     public static float commonScreenWidthInUnits = 4.62f;
     public static float ladderHeight;
+    public static int gamePlayed;
 }
