@@ -13,10 +13,16 @@ public class AudioManager : MonoBehaviour
     public AudioClip slowDownOrbPickUp;
     public AudioClip buttonPressed;
     public AudioClip pannelSlide;
+    private int _volumeState;
 
+    private void Update()
+    {
+        _volumeState = PlayerPrefs.GetInt("volumeState", 1);
+    }
 
     public void PlaySFX(AudioClip clip)
     {
-        SFXSource.PlayOneShot(clip);
+        if(_volumeState == 1)
+            SFXSource.PlayOneShot(clip);
     }
 }
