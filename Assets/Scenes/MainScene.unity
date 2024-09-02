@@ -13939,7 +13939,7 @@ GameObject:
   - component: {fileID: 1173810852}
   m_Layer: 0
   m_Name: slowDownSides
-  m_TagString: Untagged
+  m_TagString: slowDownSides
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21341,7 +21341,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1939513698
 RectTransform:
   m_ObjectHideFlags: 0

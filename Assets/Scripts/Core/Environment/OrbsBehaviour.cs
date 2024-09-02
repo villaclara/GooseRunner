@@ -11,17 +11,20 @@ public class OrbsBehaviour : MonoBehaviour
 
     public static event Action OnSpeedUpOrbPickUp;
     public static event Action OnSlowDownOrbPickUp;
-
+    ShowSides showSides;
     AudioManager audioManager;
-    private void Awake()
+
+    private void Start()
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        showSides = GameObject.FindGameObjectWithTag("slowDownSides").GetComponent<ShowSides>();
+        OnSpeedUpOrbPickUp += showSides.ShowSideSpeedUp;
+        OnSlowDownOrbPickUp += showSides.ShowSideSlowDown;
     }
 
 
     void Update()
     {
-        
         if (!PauseMenu.isPaused)
         {
             _fallSpeed = GlobalVariables.fallSpeed;
@@ -42,27 +45,24 @@ public class OrbsBehaviour : MonoBehaviour
         {
             audioManager.PlaySFX(audioManager.speedUpOrbPickUp);
             Debug.Log($"Speed was {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
+            OnSpeedUpOrbPickUp?.Invoke();
+            OnSpeedUpOrbPickUp -= showSides.ShowSideSpeedUp;
             Destroy(gameObject);
             GlobalVariables.fallSpeed += 0.08f;
             MainCharacterMovement.moveSpeed += 0.01f + Screen.width * 0.0001f;
             Debug.Log($"Speed now {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
-            OnSpeedUpOrbPickUp?.Invoke();
         }
 
         if (other.gameObject.CompareTag(_Tag) && gameObject.CompareTag(_slowDownTag))
         {
             audioManager.PlaySFX(audioManager.slowDownOrbPickUp);
             Debug.Log($"Speed was {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
+            OnSlowDownOrbPickUp?.Invoke();
+            OnSlowDownOrbPickUp -= showSides.ShowSideSlowDown;
             Destroy(gameObject);
             GlobalVariables.fallSpeed -= 0.16f;
             MainCharacterMovement.moveSpeed -= 0.04f + Screen.width * 0.0001f;
             Debug.Log($"Speed now {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
-            OnSlowDownOrbPickUp?.Invoke();
         }
-
-    }
-
-
-    
-    
+    } 
 }
