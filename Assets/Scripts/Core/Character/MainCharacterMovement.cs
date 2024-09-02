@@ -157,6 +157,7 @@ public class MainCharacterMovement : MonoBehaviour
 
 			currentPos.y = direction == Direction.Up ? currentPos.y + (_fallSpeed + 5f) * Time.deltaTime : currentPos.y - 5f * Time.deltaTime;
 
+			// Move Goose to ladder Center but INSTANTLY
 			if (moveToLadderCenter)
 			{
 				currentPos.x = _ladderPosition.x;
@@ -178,7 +179,10 @@ public class MainCharacterMovement : MonoBehaviour
 		{
 			_playerdirection = _playerdirection == Direction.Left ? Direction.Right : Direction.Left;
 			_previousDirectionX = _playerdirection;
-			_body.transform.localScale = new Vector3(Mathf.Abs(_body.transform.localScale.x) * (int)_playerdirection, _body.transform.localScale.y, _body.transform.localScale.z); // Mathf.Abs to get positive value
+			_body.transform.localScale = new Vector3(
+				Mathf.Abs(_body.transform.localScale.x) * (int)_playerdirection, 
+				_body.transform.localScale.y, 
+				_body.transform.localScale.z); // Mathf.Abs to get positive value
 																																												   //Debug.Log($"Change character direction to ({_playerdirection}).");
 		}
 	}
