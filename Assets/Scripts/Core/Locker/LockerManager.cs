@@ -25,9 +25,11 @@ public class LockerManager : MonoBehaviour
     public TextMeshProUGUI costText;
     private int _tappedSkinIndex;
     public TextMeshProUGUI gemsText;
+    AudioManager audioManager;
     // Start is called before the first frame update
     void Start()
     {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         StartCoroutine(sceneController.FadeOutScreen());
         gemsText.text = PlayerPrefs.GetInt("GemScore").ToString();
         _chosenSkinIndex = PlayerPrefs.GetInt("SkinIndex", 0);
@@ -77,7 +79,8 @@ public class LockerManager : MonoBehaviour
     }
 
     public void OnClick(Button clickedButton)
-    { 
+    {
+        audioManager.PlaySFX(audioManager.buttonPressed);
         if (clickedButton.tag == "skinButton")
         {
             if (clickedButton != _prevButtonBehind)

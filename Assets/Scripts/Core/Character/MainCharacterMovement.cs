@@ -62,10 +62,13 @@ public class MainCharacterMovement : MonoBehaviour
 
 	public bool moveToLadderCenter = true;
 
+	AudioManager audioManager;
+
 	// Start is called before the first frame update
 	private void Start()
 	{
-		_isLow = false;
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        _isLow = false;
 		float _screenWidthInUnits = Camera.main.orthographicSize * 2 * Screen.width / Screen.height;
 		moveSpeed = 1.5f * _screenWidthInUnits / GlobalVariables.commonScreenWidthInUnits;
 		Debug.Log($"move speed is {moveSpeed}");
@@ -273,6 +276,7 @@ public class MainCharacterMovement : MonoBehaviour
 		{
 			if (Input.GetTouch(0).phase == TouchPhase.Began)
 			{
+				audioManager.PlaySFX(audioManager.buttonPressed);
 				// do up if inside ladder
 				if (_characterInsideLadder)
 				{

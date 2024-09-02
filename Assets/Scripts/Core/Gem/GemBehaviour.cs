@@ -31,8 +31,11 @@ public class GemBehaviour : MonoBehaviour
     private float _time;
     private float _unitsPerPixel;
 
+    AudioManager audioManager;
+
 	private void Start()
 	{
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         _gemTotalIconObject = GameObject.Find("gemIcon");
         _gemIconPosition = _gemTotalIconObject.transform.position;
 
@@ -81,6 +84,7 @@ public class GemBehaviour : MonoBehaviour
             // Get the current Gem position - Start point of Lerp
             _startLerpPosition = transform.position;
             _gemPicked = true;
+            audioManager.PlaySFX(audioManager.gemPickUp);
 		}
 
         
