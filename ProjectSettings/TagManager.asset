@@ -15,6 +15,7 @@ TagManager:
   - blockBehindLadder
   - enemy
   - Audio
+  - slowDownSides
   layers:
   - Default
   - TransparentFX

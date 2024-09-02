@@ -7,20 +7,7 @@ public class ShowSides : MonoBehaviour
     public CanvasGroup canvGroupSpeedUp;
     public CanvasGroup canvGroupSlowDown;
 
-    private void Awake()
-    {
-        OrbsBehaviour.OnSpeedUpOrbPickUp += ShowSideSpeedUp;
-        OrbsBehaviour.OnSlowDownOrbPickUp += ShowSideSlowDown;
-    }
-
-    private void Update()
-    {
-        if(!GlobalVariables.gameIsRunning)
-        {
-            OrbsBehaviour.OnSpeedUpOrbPickUp -= ShowSideSpeedUp;
-            OrbsBehaviour.OnSlowDownOrbPickUp -= ShowSideSlowDown;
-        }
-    }
+    
     public void ShowSideSpeedUp()
     {
         StartCoroutine("showSidesCoroutine", canvGroupSpeedUp);
