@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void Start()
     {
+        GlobalVariables.score = 0;
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
 
         StartCoroutine(sceneController.FadeOutScreen());
