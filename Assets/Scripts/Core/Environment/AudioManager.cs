@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField] AudioSource anmbientSource;
+    [SerializeField] AudioSource ambientSource;
     [SerializeField] AudioSource SFXSource;
 
 
@@ -14,6 +14,14 @@ public class AudioManager : MonoBehaviour
     public AudioClip buttonPressed;
     public AudioClip pannelSlide;
     private int _volumeState;
+    private void Start()
+    {
+        _volumeState = PlayerPrefs.GetInt("volumeState", 1);
+        ambientSource.clip = background;
+        ambientSource.loop = true;
+        if (_volumeState == 1)
+            ambientSource.Play();
+    }
 
     private void Update()
     {
