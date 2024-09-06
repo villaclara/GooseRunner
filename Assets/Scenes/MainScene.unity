@@ -14100,7 +14100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ambientSource: {fileID: 913682953}
   SFXSource: {fileID: 662425678}
-  background: {fileID: 8300000, guid: df05e881199bc684a9cdcd49d4598cbc, type: 3}
+  background: {fileID: 8300000, guid: 1949960281277984086dcdf5c436ddf0, type: 3}
   gemPickUp: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
   speedUpOrbPickUp: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
   slowDownOrbPickUp: {fileID: 8300000, guid: 79180f511d89441b9aa23ccae1992fe0, type: 3}
