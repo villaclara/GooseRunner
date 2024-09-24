@@ -143,7 +143,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      adButtonIcon_0: 8147048096176883845
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -64,5 +64,11 @@ public class OrbsBehaviour : MonoBehaviour
             MainCharacterMovement.moveSpeed -= 0.04f + Screen.width * 0.0001f;
             Debug.Log($"Speed now {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
         }
-    } 
+    }
+    private void OnDestroy()
+    {
+        OnSpeedUpOrbPickUp -= showSides.ShowSideSpeedUp;
+        OnSlowDownOrbPickUp -= showSides.ShowSideSlowDown;
+    }
+
 }

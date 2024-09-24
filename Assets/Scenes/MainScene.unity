@@ -14098,9 +14098,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 241ba6ef841a67c44b08cf2040922c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anmbientSource: {fileID: 913682953}
+  ambientSource: {fileID: 913682953}
   SFXSource: {fileID: 662425678}
-  background: {fileID: 0}
+  background: {fileID: 8300000, guid: 1949960281277984086dcdf5c436ddf0, type: 3}
   gemPickUp: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
   speedUpOrbPickUp: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
   slowDownOrbPickUp: {fileID: 8300000, guid: 79180f511d89441b9aa23ccae1992fe0, type: 3}

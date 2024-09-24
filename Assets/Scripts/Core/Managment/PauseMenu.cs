@@ -22,6 +22,7 @@ public class PauseMenu : MonoBehaviour
     private int _volumeState;
     private Image volumeButtonImg;
 
+
     // Start is called before the first frame update
     void Start()
     {

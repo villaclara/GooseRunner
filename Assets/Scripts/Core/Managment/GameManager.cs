@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
     private int _enemySpawnCooldown = 7;
     
     AudioManager audioManager;
-
+    ShowSides showSides;
 
     /// <summary>
     /// IF YOU TAKE SIZE FROM SPRITE RENDERER THEN MULTYPLY IT BY OBJECTS SCALE
@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
     {
         GlobalVariables.score = 0;
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        showSides = GameObject.FindGameObjectWithTag("slowDownSides").GetComponent<ShowSides>();
 
         StartCoroutine(sceneController.FadeOutScreen());
         
@@ -796,6 +797,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+
         //audioManager.PlaySFX(audioManager.buttonPressed);
         GlobalVariables.gamePlayed++;
         if (GlobalVariables.gamePlayed % 3 == 0)
