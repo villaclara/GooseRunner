@@ -2381,9 +2381,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 241ba6ef841a67c44b08cf2040922c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anmbientSource: {fileID: 811840692}
+  ambientSource: {fileID: 811840692}
   SFXSource: {fileID: 1171630449}
-  background: {fileID: 0}
+  background: {fileID: 8300000, guid: 9dc3680b6e2fcec49a10597e0ccf9fe9, type: 3}
   gemPickUp: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
   speedUpOrbPickUp: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
   slowDownOrbPickUp: {fileID: 8300000, guid: 79180f511d89441b9aa23ccae1992fe0, type: 3}
@@ -2532,7 +2532,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0007324219, y: -0.0052490234}
+  m_AnchoredPosition: {x: 0.0007324219, y: -0.005126953}
   m_SizeDelta: {x: 0.7999878, y: 0.39990234}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1159106483

@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
     private int _enemySpawnCooldown = 7;
     
     AudioManager audioManager;
-
+    ShowSides showSides;
 
     /// <summary>
     /// IF YOU TAKE SIZE FROM SPRITE RENDERER THEN MULTYPLY IT BY OBJECTS SCALE
@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
     {
         GlobalVariables.score = 0;
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        showSides = GameObject.FindGameObjectWithTag("slowDownSides").GetComponent<ShowSides>();
 
         StartCoroutine(sceneController.FadeOutScreen());
         
@@ -318,7 +319,7 @@ public class GameManager : MonoBehaviour
 
 
 
-        if (GlobalVariables.score % 3 == 0 && GlobalVariables.fallSpeed <= 1.5f)
+        if (GlobalVariables.score % 3 == 0 && GlobalVariables.fallSpeed <= 1.4f)
         {
             GlobalVariables.fallSpeed += 0.04f;//0.04
             Debug.Log($"fallSpeed{GlobalVariables.fallSpeed}");
@@ -355,6 +356,25 @@ public class GameManager : MonoBehaviour
                     || (Mathf.Abs(_ladderPosition.x - lastVerticalWallPosX) < ladderSize.x * _ladderScaleX) 
                     || (Mathf.Abs(_ladderPosition.x - characterTransform.position.x)< ladderSize.x * _ladderScaleX));
         
+
+        //NEWCODE
+        if( i > 50)
+        {
+            if(lastLadderPosX1 > 0)
+            {
+                _ladderPosition.x = lastLadderPosX1 + ladderSize.x * _ladderScaleX;
+            }
+
+            else if(lastLadderPosX2 > 0)
+            {
+                _ladderPosition.x = lastLadderPosX2 + ladderSize.x * _ladderScaleX;
+            }
+
+            newSizeR.x = -(_ladderPosition.x - wall.transform.position.x + ladderSize.x * 0.5f * _ladderScaleX) / (_wallScale * 0.5f);
+        }
+        //////////////////////////
+
+
         wallSpriteRenderer.size = newSizeR;
         wallBoxCollider2D.size = newSizeR;
         wall.SetActive(true);
@@ -526,6 +546,24 @@ public class GameManager : MonoBehaviour
         } while ((Mathf.Abs(_ladderPosition.x - lastLadderPosX1) < ladderSize.x * _ladderScaleX) || (Mathf.Abs(_ladderPosition.x - lastVerticalWallPosX) < ladderSize.x * _ladderScaleX)
                 || (Mathf.Abs(_ladderPosition.x - characterTransform.position.x) < ladderSize.x * _ladderScaleX));
 
+
+        //NEWCODE
+        if (i > 50)
+        {
+            if (lastLadderPosX1 > 0)
+            {
+                _ladderPosition.x = lastLadderPosX1 + ladderSize.x * _ladderScaleX;
+            }
+
+            else if (lastLadderPosX2 > 0)
+            {
+                _ladderPosition.x = lastLadderPosX2 + ladderSize.x * _ladderScaleX;
+            }
+
+            newSizeR.x = -(_ladderPosition.x - wall.transform.position.x + ladderSize.x * 0.5f * _ladderScaleX) / (_wallScale * 0.5f);
+        }
+        ////////////////////////////////
+
         wallSpriteRenderer.size = newSizeR;
         wallBoxCollider2D.size = newSizeR;
         wall.SetActive(true);
@@ -573,6 +611,23 @@ public class GameManager : MonoBehaviour
         } while((Mathf.Abs(_ladderPosition.x - lastLadderPosX1) < ladderSize.x * _ladderScaleX) || (Mathf.Abs(_ladderPosition.x - lastLadderPosX2) < ladderSize.x * _ladderScaleX)
                     || (Mathf.Abs(_ladderPosition.x - lastVerticalWallPosX) < ladderSize.x * _ladderScaleX) 
                     || (Mathf.Abs(_ladderPosition.x - characterTransform.position.x) < ladderSize.x * _ladderScaleX));
+
+        //NEWCODE
+        if (i > 50)
+        {
+            if (lastLadderPosX1 < 0)
+            {
+                _ladderPosition.x = lastLadderPosX1 + ladderSize.x * _ladderScaleX;
+            }
+
+            else if (lastLadderPosX2 < 0)
+            {
+                _ladderPosition.x = lastLadderPosX2 + ladderSize.x * _ladderScaleX;
+            }
+
+            newSizeR.x = -(_ladderPosition.x - wall.transform.position.x + ladderSize.x * 0.5f * _ladderScaleX) / (_wallScale * 0.5f);
+        }
+        //////////////////////////
 
         wallSpriteRenderer.size = newSizeL;
         wallBoxCollider2D.size = newSizeL;
@@ -744,6 +799,8 @@ public class GameManager : MonoBehaviour
         else
         {
             int randOrb = Random.Range(1, 3);
+            if(characterTransform.position.y > 2.5f)
+                randOrb = 1;
             if (randOrb == 1)
             {
                 Instantiate(SpeedUpOrb, orbSpawnPos, Quaternion.identity);
@@ -796,6 +853,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+
         //audioManager.PlaySFX(audioManager.buttonPressed);
         GlobalVariables.gamePlayed++;
         if (GlobalVariables.gamePlayed % 3 == 0)
