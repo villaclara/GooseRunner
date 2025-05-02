@@ -13,11 +13,13 @@ public class OrbsBehaviour : MonoBehaviour
     public static event Action OnSlowDownOrbPickUp;
     ShowSides showSides;
     AudioManager audioManager;
+    Transform characterTransform;
 
     private void Start()
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         showSides = GameObject.FindGameObjectWithTag("slowDownSides").GetComponent<ShowSides>();
+        characterTransform = GameObject.FindGameObjectWithTag("Character").GetComponent<Transform>();
         OnSpeedUpOrbPickUp += showSides.ShowSideSpeedUp;
         OnSlowDownOrbPickUp += showSides.ShowSideSlowDown;
     }
@@ -48,8 +50,8 @@ public class OrbsBehaviour : MonoBehaviour
             OnSpeedUpOrbPickUp?.Invoke();
             OnSpeedUpOrbPickUp -= showSides.ShowSideSpeedUp;
             Destroy(gameObject);
-            GlobalVariables.fallSpeed += 0.08f;
-            MainCharacterMovement.moveSpeed += 0.01f + Screen.width * 0.0001f;
+            GlobalVariables.fallSpeed += 0.10f;
+            MainCharacterMovement.moveSpeed += 0.02f + Screen.width * 0.0001f;
             Debug.Log($"Speed now {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
         }
 
@@ -60,8 +62,10 @@ public class OrbsBehaviour : MonoBehaviour
             OnSlowDownOrbPickUp?.Invoke();
             OnSlowDownOrbPickUp -= showSides.ShowSideSlowDown;
             Destroy(gameObject);
+            
             GlobalVariables.fallSpeed -= 0.16f;
             MainCharacterMovement.moveSpeed -= 0.04f + Screen.width * 0.0001f;
+            
             Debug.Log($"Speed now {GlobalVariables.fallSpeed}, characters: {MainCharacterMovement.moveSpeed}");
         }
     }

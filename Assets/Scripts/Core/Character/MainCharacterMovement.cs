@@ -33,7 +33,8 @@ public class MainCharacterMovement : MonoBehaviour
 	private Direction _playerdirection = Direction.None;
 	private Direction _previousDirectionX = Direction.Right;
 	private float _prevMoveSpeed;
-	private bool _isLow;
+	private float _prevFallSpeed;
+	private bool _isLow, _isHigh;
 
 	float unitsPerPixel;
 
@@ -69,6 +70,7 @@ public class MainCharacterMovement : MonoBehaviour
 	{
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         _isLow = false;
+		_isHigh = false;
 		float _screenWidthInUnits = Camera.main.orthographicSize * 2 * Screen.width / Screen.height;
 		moveSpeed = 1.5f * _screenWidthInUnits / GlobalVariables.commonScreenWidthInUnits;
 		Debug.Log($"move speed is {moveSpeed}");
@@ -94,6 +96,18 @@ public class MainCharacterMovement : MonoBehaviour
 		{
 			moveSpeed = _prevMoveSpeed;
 			_isLow = false;
+		}
+
+		if(transform.position.y > 4f && !_isHigh)
+		{
+			_prevFallSpeed = GlobalVariables.fallSpeed;
+			GlobalVariables.fallSpeed = 1.4f;
+			_isHigh = true;
+		}
+		if(transform.position.y < 4f && _isHigh)
+		{
+			GlobalVariables.fallSpeed = _prevFallSpeed + (GlobalVariables.fallSpeed - 1.4f);
+			_isHigh = false;
 		}
 
 
