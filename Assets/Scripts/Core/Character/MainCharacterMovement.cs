@@ -1,11 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 
 
 public class MainCharacterMovement : MonoBehaviour
@@ -68,8 +61,8 @@ public class MainCharacterMovement : MonoBehaviour
 	// Start is called before the first frame update
 	private void Start()
 	{
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-        _isLow = false;
+		audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+		_isLow = false;
 		_isHigh = false;
 		float _screenWidthInUnits = Camera.main.orthographicSize * 2 * Screen.width / Screen.height;
 		moveSpeed = 1.5f * _screenWidthInUnits / GlobalVariables.commonScreenWidthInUnits;
@@ -98,13 +91,13 @@ public class MainCharacterMovement : MonoBehaviour
 			_isLow = false;
 		}
 
-		if(transform.position.y > 4f && !_isHigh)
+		if (transform.position.y > 4f && !_isHigh)
 		{
 			_prevFallSpeed = GlobalVariables.fallSpeed;
 			GlobalVariables.fallSpeed = 1.4f;
 			_isHigh = true;
 		}
-		if(transform.position.y < 4f && _isHigh)
+		if (transform.position.y < 4f && _isHigh)
 		{
 			GlobalVariables.fallSpeed = _prevFallSpeed + (GlobalVariables.fallSpeed - 1.4f);
 			_isHigh = false;
@@ -197,10 +190,10 @@ public class MainCharacterMovement : MonoBehaviour
 			_playerdirection = _playerdirection == Direction.Left ? Direction.Right : Direction.Left;
 			_previousDirectionX = _playerdirection;
 			_body.transform.localScale = new Vector3(
-				Mathf.Abs(_body.transform.localScale.x) * (int)_playerdirection, 
-				_body.transform.localScale.y, 
+				Mathf.Abs(_body.transform.localScale.x) * (int)_playerdirection,
+				_body.transform.localScale.y,
 				_body.transform.localScale.z); // Mathf.Abs to get positive value
-																																												   //Debug.Log($"Change character direction to ({_playerdirection}).");
+											   //Debug.Log($"Change character direction to ({_playerdirection}).");
 		}
 	}
 
@@ -305,6 +298,26 @@ public class MainCharacterMovement : MonoBehaviour
 					_previousDirectionX = _playerdirection;
 					//Debug.Log($"Direction({_playerdirection}), previous({_previousDirectionX}).");
 				}
+			}
+		}
+
+		// Mouse handling also for Goose movement.
+		else if (Input.GetMouseButtonDown(0))
+		{
+			audioManager.PlaySFX(audioManager.buttonPressed);
+			// do up if inside ladder
+			if (_characterInsideLadder)
+			{
+				_playerdirection = Direction.Up;
+				//Debug.Log($"Inside ladder. Direction({_playerdirection}), previous({_previousDirectionX}).");
+			}
+			// else do left/right
+			else
+			{
+				//Debug.Log($"previousdirection({_previousDirectionX}.");
+				_playerdirection = _playerdirection == Direction.Left ? Direction.Right : Direction.Left;
+				_previousDirectionX = _playerdirection;
+				//Debug.Log($"Direction({_playerdirection}), previous({_previousDirectionX}).");
 			}
 		}
 	}
