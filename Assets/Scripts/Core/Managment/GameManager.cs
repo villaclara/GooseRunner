@@ -858,7 +858,7 @@ public class GameManager : MonoBehaviour
         GlobalVariables.gamePlayed++;
         if (GlobalVariables.gamePlayed % 3 == 0)
         {
-            AdManager.Instance.interstitialAds.ShowInterstitialAd();
+            //AdManager.Instance.interstitialAds.ShowInterstitialAd();
         }
         StartCoroutine(sceneController.FadeInScreen());
         SceneManager.LoadScene(0);
@@ -869,7 +869,7 @@ public class GameManager : MonoBehaviour
     public void MultiplyGems()
     {
         //audioManager.PlaySFX(audioManager.buttonPressed);
-        AdManager.Instance.rewardedAds.ShowRewardedAd();
+        //AdManager.Instance.rewardedAds.ShowRewardedAd();
     }
 
     private void GetFPS()
