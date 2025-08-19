@@ -5,6 +5,7 @@ using UnityEngine;
 public class gemsTextPannelScript : MonoBehaviour
 {
     public GameObject addPannel;
+    public GameObject restartPannel;
     private Animator animator;
     AudioManager audioManager;
     private void Start()
@@ -14,7 +15,8 @@ public class gemsTextPannelScript : MonoBehaviour
     public void AddPannelAnim()
     {
         audioManager.PlaySFX(audioManager.pannelSlide);
-        animator = addPannel.GetComponent<Animator>();
+        //animator = addPannel.GetComponent<Animator>();
+        animator = restartPannel.GetComponent<Animator>();
         animator.SetTrigger("activate");
     }
 }

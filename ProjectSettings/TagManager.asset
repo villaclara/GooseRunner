@@ -16,6 +16,9 @@ TagManager:
   - enemy
   - Audio
   - slowDownSides
+  - adButton
+  - adText
+  - gemsCollected
   layers:
   - Default
   - TransparentFX

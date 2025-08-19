@@ -667,231 +667,231 @@ public class GameManager : MonoBehaviour
 
 
 		lastLadderPosX2 = _ladderPosition.x;
-		_ladderPosition = ladder1.transform.position;
-		lastLadderPosX1 = _ladderPosition.x;
-		//////////////////////////////////////////////////////////////////////////////
+        _ladderPosition = ladder1.transform.position;
+        lastLadderPosX1 = _ladderPosition.x;
+        //////////////////////////////////////////////////////////////////////////////
 
-		wall = _walls[FindUnusedObject(_walls)];
-		wallSpriteRenderer = wall.GetComponent<SpriteRenderer>();
-		wallBoxCollider2D = wall.GetComponent<BoxCollider2D>();
-		Vector2 newSizeM = wallSpriteRenderer.size;
-		newSizeM.x = ((Screen.width * _unitsPerPixel) - (2f * ladderSize.x * _ladderScaleX) - newSizeL.x * 0.5f * _wallScale - newSizeR.x * 0.5f * _wallScale) / _wallScale;
-		float spawnPosMx = _ladderPosition.x - ladderSize.x * 0.5f * _ladderScaleX - newSizeM.x * 0.5f * _wallScale;
-		wallSpriteRenderer.size = newSizeM;
-		wallBoxCollider2D.size = newSizeM;
+        wall = _walls[FindUnusedObject(_walls)];
+        wallSpriteRenderer = wall.GetComponent<SpriteRenderer>();
+        wallBoxCollider2D = wall.GetComponent<BoxCollider2D>();
+        Vector2 newSizeM = wallSpriteRenderer.size;
+        newSizeM.x = ((Screen.width * _unitsPerPixel) - (2f * ladderSize.x * _ladderScaleX) - newSizeL.x * 0.5f * _wallScale - newSizeR.x * 0.5f * _wallScale) / _wallScale;
+        float spawnPosMx = _ladderPosition.x - ladderSize.x * 0.5f * _ladderScaleX - newSizeM.x * 0.5f * _wallScale;
+        wallSpriteRenderer.size = newSizeM;
+        wallBoxCollider2D.size = newSizeM;
 
-		wall.SetActive(true);
-		wall.transform.position = new Vector2(
-			spawnPosMx,
-			spawnPosY
-		);
-		///////////////////////////////////////////////////////////////////
+        wall.SetActive(true);
+        wall.transform.position = new Vector2(
+            spawnPosMx,
+            spawnPosY
+        );
+        ///////////////////////////////////////////////////////////////////
 
-		GameObject verticalWall = _verticalWalls[FindUnusedObject(_verticalWalls)];
-		verticalWall.SetActive(true);
-		Vector2 Vsize = verticalWallRenderer.size;
-		float VPosY = newSizeM.y * 0.5f * _verticalWallScale + Vsize.y * 0.5f * _verticalWallScale + spawnPosY;
-		verticalWall.transform.position = new Vector2(
-			spawnPosMx,
-			VPosY
-			);
-		lastVerticalWallPosX = spawnPosMx;
+        GameObject verticalWall = _verticalWalls[FindUnusedObject(_verticalWalls)];
+        verticalWall.SetActive(true);
+        Vector2 Vsize = verticalWallRenderer.size;
+        float VPosY = newSizeM.y * 0.5f * _verticalWallScale + Vsize.y * 0.5f * _verticalWallScale + spawnPosY;
+        verticalWall.transform.position = new Vector2(
+            spawnPosMx,
+            VPosY
+            );
+        lastVerticalWallPosX = spawnPosMx;
 
-		/////////////////
-		int randomBGSpawn = Random.Range(1, 4);
-		if (randomBGSpawn == 1)
-		{
-			GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-			float BGWallSpawnPosX = spawnPosMx + _verticalWallScale * Vsize.x * 0.5f;
-			BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
-			BGWall.SetActive(true);
+        /////////////////
+        int randomBGSpawn = Random.Range(1, 4);
+        if (randomBGSpawn == 1)
+        {
+            GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
+            float BGWallSpawnPosX = spawnPosMx + _verticalWallScale * Vsize.x * 0.5f;
+            BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
+            BGWall.SetActive(true);
 
-			BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-			BGWallSpawnPosX = BGWallSpawnPosX + 1f;// one becouse it the width of the BGWall
-			BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
-			BGWall.SetActive(true);
-		}
-		else if (randomBGSpawn == 2)
-		{
-			GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-			float BGWallSpawnPosX = spawnPosMx - _verticalWallScale * Vsize.x * 0.5f - 0.5f;
-			BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
-			BGWall.SetActive(true);
+            BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
+            BGWallSpawnPosX = BGWallSpawnPosX + 1f;// one becouse it the width of the BGWall
+            BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
+            BGWall.SetActive(true);
+        }
+        else if(randomBGSpawn == 2)
+        {
+            GameObject BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
+            float BGWallSpawnPosX = spawnPosMx - _verticalWallScale * Vsize.x * 0.5f - 0.5f;
+            BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
+            BGWall.SetActive(true);
 
-			BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
-			BGWallSpawnPosX = BGWallSpawnPosX - 1f;// one becouse it the width of the BGWall
-			BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
-			BGWall.SetActive(true);
-		}
-		else if (randomBGSpawn == 3)
-		{
-			GameObject brickWall = _brickWalls[FindUnusedObject(_brickWalls)];
-			SpriteRenderer brickWallRenderer = brickWall.GetComponent<SpriteRenderer>();
-			Vector2 brickWallSize = brickWallRenderer.size;
-			brickWallSize.x = Random.Range(0.25f * Screen.width * _unitsPerPixel, 0.75f * Screen.width * _unitsPerPixel);
-			brickWallRenderer.size = brickWallSize;
+            BGWall = _BGWalls[FindUnusedObject(_BGWalls)];
+            BGWallSpawnPosX = BGWallSpawnPosX - 1f;// one becouse it the width of the BGWall
+            BGWall.transform.position = new Vector2(BGWallSpawnPosX, VPosY + 0.1f);
+            BGWall.SetActive(true);
+        }
+        else if(randomBGSpawn == 3)
+        {
+            GameObject brickWall = _brickWalls[FindUnusedObject(_brickWalls)];
+            SpriteRenderer brickWallRenderer = brickWall.GetComponent<SpriteRenderer>();
+            Vector2 brickWallSize = brickWallRenderer.size;
+            brickWallSize.x = Random.Range(0.25f * Screen.width * _unitsPerPixel, 0.75f * Screen.width * _unitsPerPixel);
+            brickWallRenderer.size = brickWallSize;
 
-			brickWall.SetActive(true);
-			brickWall.transform.position = new Vector2(_spawnPosR.x - brickWallSize.x, newSizeL.y * 0.5f + spawnPosY + brickWallSize.y * 0.5f);
-		}
-
-
-		////
-		//randomBGSpawn = Random.Range(1, 15);
-		//if (randomBGSpawn == 13 || randomBGSpawn == 14)
-		//{
-		//    GameObject frontWall = _FrontWalls[FindUnusedObject(_FrontWalls)];
-		//    float frontWallSpawnPosX = randomBGSpawn == 13 ? spawnPointRight.transform.position.x - 1.25f : spawnPointLeft.transform.position.x + 1.25f;//1.25 -width/2
-		//    float frontWallSpawnPosY = spawnPosY - newSizeR.y * 0.5f * _wallScale + 1.25f * 0.5f; //1.25f * 0.5f height/2
-		//    frontWall.transform.position = new Vector2(frontWallSpawnPosX, frontWallSpawnPosY);
-		//    frontWall.SetActive(true);
-		//}
-
-		if ((_currentOrbSpawnCooldown == 0) && (_currentGemSpawnCooldown != 0))
-		{
-			SpawnOrb(wall, lastLadderPosX1, lastLadderPosX2, lastVerticalWallPosX);
-			_currentOrbSpawnCooldown = orbSpawnCooldown;
-		}
-
-		if (_currentOrbSpawnCooldown == 0 && _currentGemSpawnCooldown == 0)
-			_currentOrbSpawnCooldown++;
-
-		if (_currentGemSpawnCooldown == 0)
-		{
-			SpawnGem(wall, lastLadderPosX1, lastLadderPosX2, lastVerticalWallPosX);
-			_currentGemSpawnCooldown = gemSpawnCooldown;
-		}
-
-		WallBehindLadderScript wallBScript1 = ladder1.GetComponent<WallBehindLadderScript>();
-		WallBehindLadderScript wallBScript2 = ladder2.GetComponent<WallBehindLadderScript>();
+            brickWall.SetActive(true);
+            brickWall.transform.position = new Vector2(_spawnPosR.x - brickWallSize.x, newSizeL.y * 0.5f + spawnPosY + brickWallSize.y * 0.5f);
+        }
 
 
-		wallBScript1.wall = wallBehind1;
-		wallBScript1.otherWall = wallBehind2;
+        ////
+        //randomBGSpawn = Random.Range(1, 15);
+        //if (randomBGSpawn == 13 || randomBGSpawn == 14)
+        //{
+        //    GameObject frontWall = _FrontWalls[FindUnusedObject(_FrontWalls)];
+        //    float frontWallSpawnPosX = randomBGSpawn == 13 ? spawnPointRight.transform.position.x - 1.25f : spawnPointLeft.transform.position.x + 1.25f;//1.25 -width/2
+        //    float frontWallSpawnPosY = spawnPosY - newSizeR.y * 0.5f * _wallScale + 1.25f * 0.5f; //1.25f * 0.5f height/2
+        //    frontWall.transform.position = new Vector2(frontWallSpawnPosX, frontWallSpawnPosY);
+        //    frontWall.SetActive(true);
+        //}
+
+        if ((_currentOrbSpawnCooldown == 0) && (_currentGemSpawnCooldown != 0))
+        {
+            SpawnOrb(wall, lastLadderPosX1, lastLadderPosX2, lastVerticalWallPosX);
+            _currentOrbSpawnCooldown = orbSpawnCooldown;
+        }
+
+        if (_currentOrbSpawnCooldown == 0 && _currentGemSpawnCooldown == 0)
+            _currentOrbSpawnCooldown++;
+
+        if (_currentGemSpawnCooldown == 0)
+        {
+            SpawnGem(wall, lastLadderPosX1, lastLadderPosX2, lastVerticalWallPosX);
+            _currentGemSpawnCooldown = gemSpawnCooldown;
+        }
+
+        WallBehindLadderScript wallBScript1 = ladder1.GetComponent<WallBehindLadderScript>();
+        WallBehindLadderScript wallBScript2 = ladder2.GetComponent<WallBehindLadderScript>();
 
 
-		wallBScript2.wall = wallBehind2;
-		wallBScript2.otherWall = wallBehind1;
-	}
-
-	private void SpawnGem(GameObject wall, float lastLadderPosX1, float lastLadderPosX2, float lastVerticalVallPosX)
-	{
-		float wallSizeY = wallSpriteRenderer.size.y;
-		float wallPosY = wall.transform.position.y;
-		Vector2 gemSpawnPos = spawnPointLeft.transform.position;
-
-		gemSpawnPos.y = wallPosY - 1.5f * (wallSizeY * _wallScale);
-		do
-		{
-			gemSpawnPos.x = Random.Range(spawnPointLeft.transform.position.x + 0.5f, spawnPointRight.transform.position.x - 0.5f);
-		} while ((Mathf.Abs(gemSpawnPos.x - lastLadderPosX1) < 3f * 0.1258) || (Mathf.Abs(gemSpawnPos.x - lastLadderPosX2) < 3f * 0.1258)
-					|| (Mathf.Abs(gemSpawnPos.x - lastVerticalWallPosX) < 3f * 0.1258));// 2.5f - gems size, 0.1258 - gems scale, havent added variables for it
-
-		Instantiate(gem, gemSpawnPos, Quaternion.identity);
-	}
-
-	private void SpawnOrb(GameObject wall, float lastLadderPosX1, float lastLadderPosX2, float lastVerticalVallPosX)
-	{
-		SpawnCloud();
-		float wallSizeY = wallSpriteRenderer.size.y;
-		float wallPosY = wall.transform.position.y;
-		Vector2 orbSpawnPos = spawnPointLeft.transform.position;
-
-		orbSpawnPos.y = wallPosY - 1.5f * (wallSizeY * _wallScale);
-		do
-		{
-			orbSpawnPos.x = Random.Range(spawnPointLeft.transform.position.x + 0.5f, spawnPointRight.transform.position.x - 0.5f);
-		} while ((Mathf.Abs(orbSpawnPos.x - lastLadderPosX1) < 3f * 0.1258) || (Mathf.Abs(orbSpawnPos.x - lastLadderPosX2) < 3f * 0.1258)
-					|| (Mathf.Abs(orbSpawnPos.x - lastVerticalWallPosX) < 3f * 0.1258));
-
-		if (GlobalVariables.fallSpeed < 0.6f)
-		{
-			Instantiate(SpeedUpOrb, orbSpawnPos, Quaternion.identity);
-		}
-		else if (GlobalVariables.fallSpeed > 1.4f)
-		{
-			Instantiate(SlowDownOrb, orbSpawnPos, Quaternion.identity);
-
-		}
-		else
-		{
-			int randOrb = Random.Range(1, 3);
-			if (characterTransform.position.y > 2.5f)
-				randOrb = 1;
-			if (randOrb == 1)
-			{
-				Instantiate(SpeedUpOrb, orbSpawnPos, Quaternion.identity);
-			}
-			else
-			{
-				Instantiate(SlowDownOrb, orbSpawnPos, Quaternion.identity);
-			}
-		}
-
-	}
-
-	private int FindUnusedObject(GameObject[] obj)
-	{
-		for (int i = 0; i < obj.Length; i++)
-		{
-			if (!obj[i].activeInHierarchy)
-				return i;
-		}
-		return 0;
-	}
-
-	private void Resize(GameObject[] obj)
-	{
-		for (int i = 0; i < obj.Length; i++)
-		{
-			_objRenderer = obj[i].GetComponent<SpriteRenderer>();
-			Vector2 objSize = _objRenderer.size;
-			objSize.x *= _screenWidthInUnits / GlobalVariables.commonScreenWidthInUnits;
-			_objRenderer.size = objSize;
-		}
-	}
-	public void GameOver()
-	{
-		audioManager.PlaySFX(audioManager.pannelSlide);
-		onGameOverScreen = true;
-
-		if (gemsCollected == 0)
-			adButton.interactable = false;
-
-		gameOverScreenGemsCollected.text += gemsCollected.ToString();
-		scoreText.enabled = false;
-		gameOverUI.SetActive(true);
-		restartButton.SetActive(true);
-		GlobalVariables.fallSpeed = 0;
-		CancelInvoke("SpawnBoulder");
-		_rightWalls.Clear();
-		pauseButton.SetActive(false);
-	}
-
-	public void Restart()
-	{
-
-		//audioManager.PlaySFX(audioManager.buttonPressed);
-		GlobalVariables.gamePlayed++;
-		if (GlobalVariables.gamePlayed % 3 == 0)
-		{
-			AdManager.Instance.interstitialAds.ShowInterstitialAd();
-		}
-		StartCoroutine(sceneController.FadeInScreen());
-		SceneManager.LoadScene(0);
-		GlobalVariables.score = 0;
-	}
+        wallBScript1.wall = wallBehind1;
+        wallBScript1.otherWall = wallBehind2;
 
 
-	public void MultiplyGems()
-	{
-		//audioManager.PlaySFX(audioManager.buttonPressed);
-		AdManager.Instance.rewardedAds.ShowRewardedAd();
-	}
+        wallBScript2.wall = wallBehind2;
+        wallBScript2.otherWall = wallBehind1;
+    }
 
-	private void GetFPS()
-	{
-		fps = (int)(1f / Time.unscaledDeltaTime);
-		FPSCounter.text = "FPS: " + fps.ToString();
-	}
+    private void SpawnGem(GameObject wall, float lastLadderPosX1, float lastLadderPosX2, float lastVerticalVallPosX)
+    {
+        float wallSizeY = wallSpriteRenderer.size.y;
+        float wallPosY = wall.transform.position.y;
+        Vector2 gemSpawnPos = spawnPointLeft.transform.position;
+        
+        gemSpawnPos.y = wallPosY - 1.5f * (wallSizeY * _wallScale);
+        do
+        {
+            gemSpawnPos.x = Random.Range(spawnPointLeft.transform.position.x + 0.5f, spawnPointRight.transform.position.x - 0.5f);
+        } while ((Mathf.Abs(gemSpawnPos.x - lastLadderPosX1) < 3f * 0.1258) || (Mathf.Abs(gemSpawnPos.x - lastLadderPosX2) < 3f * 0.1258)
+                    || (Mathf.Abs(gemSpawnPos.x - lastVerticalWallPosX) < 3f * 0.1258));// 2.5f - gems size, 0.1258 - gems scale, havent added variables for it
+
+        Instantiate(gem, gemSpawnPos, Quaternion.identity);
+    }
+
+    private void SpawnOrb(GameObject wall, float lastLadderPosX1, float lastLadderPosX2, float lastVerticalVallPosX)
+    {
+        SpawnCloud();
+        float wallSizeY = wallSpriteRenderer.size.y;
+        float wallPosY = wall.transform.position.y;
+        Vector2 orbSpawnPos = spawnPointLeft.transform.position;
+
+        orbSpawnPos.y = wallPosY - 1.5f * (wallSizeY * _wallScale);
+        do
+        {
+            orbSpawnPos.x = Random.Range(spawnPointLeft.transform.position.x + 0.5f, spawnPointRight.transform.position.x - 0.5f);
+        } while ((Mathf.Abs(orbSpawnPos.x - lastLadderPosX1) < 3f * 0.1258) || (Mathf.Abs(orbSpawnPos.x - lastLadderPosX2) < 3f * 0.1258)
+                    || (Mathf.Abs(orbSpawnPos.x - lastVerticalWallPosX) < 3f * 0.1258));
+
+        if (GlobalVariables.fallSpeed < 0.6f)
+        {
+            Instantiate(SpeedUpOrb, orbSpawnPos, Quaternion.identity);
+        }
+        else if (GlobalVariables.fallSpeed > 1.4f)
+        {
+            Instantiate(SlowDownOrb, orbSpawnPos, Quaternion.identity);
+
+        }
+        else
+        {
+            int randOrb = Random.Range(1, 3);
+            if(characterTransform.position.y > 2.5f)
+                randOrb = 1;
+            if (randOrb == 1)
+            {
+                Instantiate(SpeedUpOrb, orbSpawnPos, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(SlowDownOrb, orbSpawnPos, Quaternion.identity);
+            }
+        }
+
+    }
+
+    private int FindUnusedObject(GameObject[] obj)
+    {
+        for (int i = 0; i < obj.Length; i++)
+        {
+            if (!obj[i].activeInHierarchy)
+                return i;
+        }
+        return 0;
+    }
+
+    private void Resize(GameObject[] obj)
+    {
+        for (int i = 0; i < obj.Length; i++)
+        {
+            _objRenderer = obj[i].GetComponent<SpriteRenderer>();
+            Vector2 objSize = _objRenderer.size;
+            objSize.x *= _screenWidthInUnits / GlobalVariables.commonScreenWidthInUnits;
+            _objRenderer.size = objSize;
+        }
+    }
+    public void GameOver()
+    {
+        audioManager.PlaySFX(audioManager.pannelSlide);
+        onGameOverScreen = true;
+
+        if (gemsCollected == 0)
+            adButton.interactable = false;
+
+        gameOverScreenGemsCollected.text += gemsCollected.ToString();
+        scoreText.enabled = false;
+        gameOverUI.SetActive(true);
+        restartButton.SetActive(true);
+        GlobalVariables.fallSpeed = 0;
+        CancelInvoke("SpawnBoulder");
+        _rightWalls.Clear();
+        pauseButton.SetActive(false);
+    }
+
+    public void Restart()
+    {
+
+        //audioManager.PlaySFX(audioManager.buttonPressed);
+        GlobalVariables.gamePlayed++;
+        if (GlobalVariables.gamePlayed % 3 == 0)
+        {
+            //AdManager.Instance.interstitialAds.ShowInterstitialAd();
+        }
+        StartCoroutine(sceneController.FadeInScreen());
+        SceneManager.LoadScene(0);
+        GlobalVariables.score = 0;
+    }
+
+
+    public void MultiplyGems()
+    {
+        //audioManager.PlaySFX(audioManager.buttonPressed);
+        //AdManager.Instance.rewardedAds.ShowRewardedAd();
+    }
+
+    private void GetFPS()
+    {
+        fps = (int)(1f / Time.unscaledDeltaTime);
+        FPSCounter.text = "FPS: " + fps.ToString();
+    }
 }
