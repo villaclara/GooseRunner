@@ -4,4 +4,4 @@ All visuals were hand-drawn, giving the game a unique and polished design.
 
 ## Where to play
 - Android build (.apk) available to download on itch.io
-- WebGl version to play in any browser - https://villaclara.github.io/gooserunner-webgl.
+- WebGl version to play in any browser is available at [Github Pages](https://villaclara.github.io/gooserunner-webgl) (webgl project repo can be found [here](https://github.com/villaclara/gooserunner-webgl)).
