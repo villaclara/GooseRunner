@@ -10,4 +10,7 @@ All visuals were hand-drawn, giving the game a unique and polished design.
 - WebGl version to play in any browser is available at [Github Pages](https://villaclara.github.io/gooserunner-webgl) (webgl project repo can be found [here](https://github.com/villaclara/gooserunner-webgl)).
 
 ## Screenshots:
+<p float="left">
 <img width="300" height="600" alt="goose_runner" src="https://github.com/user-attachments/assets/92808888-e9a9-46d8-bd52-f7c139d43a9c" />
+<img width="300" height="600" alt="Screenshot 2025-08-21 231226-portrait" src="https://github.com/user-attachments/assets/90beaa9e-8e3b-4e29-b3bd-70a261c1c08e" />
+</p>
